@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="paper">#FFFFFFFF</color>
+    <color name="ink">#FF141414</color>
+    <color name="lavender_page">#FFE8E3F0</color>
+    <color name="mood_happy">#FFA6EB8C</color>
+</resources>

@@ -1,0 +1,16 @@
+*.iml
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/build
+/app/build
+/captures
+.externalNativeBuild
+.cxx
+.kotlin
+# Graphify — productos locales (no commitear; se regeneran)
+graphify-out/cache/
+graphify-out/converted/
+graphify-out/.graphify_*
+graphify-out/graph.html

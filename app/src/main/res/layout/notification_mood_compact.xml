@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Notificación contraída: solo las caras (el alto disponible es de ~48dp). -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/faces"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />

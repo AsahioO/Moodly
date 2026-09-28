@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Moodly</string>
+
+    <!-- Onboarding -->
+    <string name="ob_line_1">¿No sabes</string>
+    <string name="ob_line_2">cómo te</string>
+    <string name="ob_line_3">sientes?</string>
+    <string name="ob_cta">¡Te ayudamos!</string>
+    <string name="ob_cd">Introducción. Arrastra o toca las figuras.</string>
+    <string name="ob_name_title">¿Cómo te llamas?</string>
+    <string name="ob_name_sub">Así te saludamos cada día.</string>
+    <string name="ob_name_hint">Tu nombre</string>
+    <string name="ob_continue">Continuar</string>
+    <string name="ob_reminder_title">¿A qué hora te recordamos?</string>
+    <string name="ob_reminder_sub">Un aviso al día con tus 6 caras: tocas una y queda guardado.</string>
+    <string name="ob_reminder_enable">Activar recordatorio</string>
+    <string name="ob_not_now">Ahora no</string>
+
+    <!-- Pestañas -->
+    <string name="tab_home">Inicio</string>
+    <string name="tab_insights">Resumen</string>
+    <string name="tab_calendar">Calendario</string>
+    <string name="tab_settings">Ajustes</string>
+
+    <!-- Inicio -->
+    <string name="welcome_back">Bienvenido de nuevo</string>
+    <string name="greeting">¡Hola %1$s! ¿Cómo te sientes hoy?</string>
+    <string name="greeting_anon">¡Hola! ¿Cómo te sientes hoy?</string>
+    <string name="no_data">—</string>
+    <string name="tap_to_log">Toca para registrar</string>
+    <string name="take_quiz">Haz el quiz</string>
+    <string name="cd_sleep_card_empty">Duración del sueño: sin registrar. Toca para registrar.</string>
+    <string name="cd_stress_card_empty">Indicador de estrés: sin datos. Toca para ver detalles.</string>
+    <string name="cd_menu">Menú</string>
+    <string name="cd_profile">Abrir ajustes</string>
+    <string name="sleep_duration">Duración del sueño</string>
+    <string name="stress_indicator">Indicador de estrés</string>
+    <string name="quiz_title">Quiz de Sí o No</string>
+    <string name="quiz_progress">Pregunta %1$d/%2$d</string>
+    <string name="quiz_done_label">Completado</string>
+    <string name="quiz_done_text">¡Listo! Tu nivel de estrés es %1$s.</string>
+    <string name="yes">Sí</string>
+    <string name="no">No</string>
+    <string name="quiz_retake">Repetir quiz</string>
+    <string name="unit_h">h</string>
+    <string name="unit_min">min</string>
+    <string name="cd_log_mood">Registrar ánimo de hoy: %1$s</string>
+    <string name="cd_sleep_card">Duración del sueño: %1$d horas %2$d minutos. Toca para editar.</string>
+    <string name="home_add_context">Agregar nota o etiquetas</string>
+    <string name="cd_edit_context">Editar nota y etiquetas de hoy</string>
+    <string name="cd_stress_card">Indicador de estrés: %1$s. Toca para ver detalles.</string>
+
+    <string name="quiz_q1">¿Has dormido bien últimamente?</string>
+    <string name="quiz_q2">¿Te sientes abrumado por tus pendientes?</string>
+    <string name="quiz_q3">¿Has comido a tus horas?</string>
+    <string name="quiz_q4">¿Te cuesta relajarte por las noches?</string>
+    <string name="quiz_q5">¿Saliste al aire libre esta semana?</string>
+    <string name="quiz_q6">¿Te irritan más las cosas pequeñas?</string>
+    <string name="quiz_q7">¿Platicaste con un amigo estos días?</string>
+    <string name="quiz_q8">¿Despiertas sintiéndote descansado?</string>
+
+    <!-- Ánimos -->
+    <string name="mood_happy">Feliz</string>
+    <string name="mood_angry">Enojado</string>
+    <string name="mood_sleepy">Somnoliento</string>
+    <string name="mood_bored">Aburrido</string>
+    <string name="mood_calm">Tranquilo</string>
+    <string name="mood_stressed">Estresado</string>
+
+    <string name="mood_msg_happy">Te sientes tranquilo y optimista. ¡Sigue con esa buena vibra!</string>
+    <string name="mood_msg_angry">Ha sido un mes tenso. Pausas cortas y caminar pueden ayudar.</string>
+    <string name="mood_msg_sleepy">Tu energía ha estado baja. Intenta dormirte más temprano.</string>
+    <string name="mood_msg_bored">Las cosas se sienten planas. Planea algo pequeño que te ilusione.</string>
+    <string name="mood_msg_calm">Un mes estable y equilibrado. Tu rutina te está funcionando.</string>
+    <string name="mood_msg_stressed">La presión se acumula. Haz espacio para descansar y respirar.</string>
+
+    <!-- Estrés -->
+    <string name="stress_low">Bajo</string>
+    <string name="stress_medium">Medio</string>
+    <string name="stress_high">Alto</string>
+    <string name="stress_text_low">Tus respuestas apuntan a una semana tranquila y con buen descanso.</string>
+    <string name="stress_text_medium">Aparecen algunas señales de presión. Nada alarmante, pero vale la pena observarlas.</string>
+    <string name="stress_text_high">Tus registros recientes muestran estrés sostenido. Pequeñas pausas diarias hacen una gran diferencia.</string>
+    <string name="stress_tip_low_1">Mantén tu horario de sueño actual.</string>
+    <string name="stress_tip_low_2">Protege las rutinas que te están funcionando.</string>
+    <string name="stress_tip_low_3">Vuelve a revisar la próxima semana.</string>
+    <string name="stress_tip_medium_1">Camina 10 minutos después de comer.</string>
+    <string name="stress_tip_medium_2">Deja las pantallas 30 minutos antes de dormir.</string>
+    <string name="stress_tip_medium_3">Escribe hoy las tres tareas clave de mañana.</string>
+    <string name="stress_tip_high_1">Prueba la respiración 4-7-8 durante dos minutos.</string>
+    <string name="stress_tip_high_2">Mueve una tarea no urgente a la próxima semana.</string>
+    <string name="stress_tip_high_3">Habla con alguien de confianza sobre cómo te sientes.</string>
+
+    <!-- Calendario -->
+    <string name="calendar_title">Calendario de ánimo</string>
+    <string name="month_year">%1$s, %2$d</string>
+    <string name="month_summary">Resumen del mes</string>
+    <string name="no_entries">Sin registros</string>
+    <string name="no_entries_msg">Toca un día para registrar cómo te sentiste.</string>
+    <string name="logged">Registrados</string>
+    <string name="days_unit">Días</string>
+    <string name="discipline">Disciplina</string>
+    <string name="focus_score">Enfoque</string>
+    <string name="cd_back">Atrás</string>
+    <string name="cd_pick_month">Elegir mes</string>
+    <string name="cd_day_logged">%1$d de %2$s, %3$s</string>
+    <string name="cd_day_has_context">, con nota o etiquetas</string>
+    <string name="cd_day_empty">%1$d de %2$s, sin registro</string>
+    <string name="cd_day_future">%1$d de %2$s, día futuro</string>
+
+    <!-- Resumen -->
+    <string name="insights_title">Resumen</string>
+    <string name="mood_distribution">Distribución del ánimo</string>
+    <string name="days_logged">días registrados</string>
+    <string name="last_7_days">Últimos 7 días</string>
+    <string name="body_mind">Cuerpo y mente</string>
+    <string name="sleep_last_night">Sueño de anoche</string>
+    <string name="stress_level">Nivel de estrés</string>
+    <string name="no_entries_month">Aún no hay registros este mes.</string>
+    <plurals name="days_count">
+        <item quantity="one">%d día</item>
+        <item quantity="many">%d días</item>
+        <item quantity="other">%d días</item>
+    </plurals>
+
+    <!-- Ajustes -->
+    <string name="settings_title">Ajustes</string>
+    <string name="settings_sub">Perfil y preferencias</string>
+    <string name="checking_since">Registrando desde %1$s de %2$d</string>
+    <string name="preferences">Preferencias</string>
+    <string name="haptics">Vibración al tocar</string>
+    <string name="haptics_sub">Respuesta háptica en botones y gestos</string>
+    <string name="reduce_motion">Reducir animaciones</string>
+    <string name="reduce_motion_sub">Transiciones más cortas y simples</string>
+    <string name="app_section">App</string>
+    <string name="replay_intro">Repetir introducción</string>
+    <string name="reset_data">Borrar todos los datos</string>
+    <string name="reminder_section">Recordatorio</string>
+    <string name="reminder_daily">Recordatorio diario</string>
+    <string name="reminder_daily_sub">Registra tu ánimo desde la notificación</string>
+    <string name="reminder_time">Hora del recordatorio</string>
+    <string name="tags_setting">Etiquetas</string>
+    <string name="footer_local">Tus registros se guardan solo en este dispositivo.</string>
+
+    <!-- Hojas -->
+    <string name="day_sheet_question">¿Cómo te sentiste este día?</string>
+    <string name="today">Hoy</string>
+    <string name="weekday_today">%1$s · Hoy</string>
+    <string name="day_month">%1$d de %2$s</string>
+    <string name="clear_entry">Borrar registro</string>
+    <string name="last_night">Anoche</string>
+    <string name="less_15">15 minutos menos</string>
+    <string name="more_15">15 minutos más</string>
+    <string name="save">Guardar</string>
+    <string name="sleep_hint_short">Un poco corto. La mayoría de los adultos necesita de 7 a 9 horas.</string>
+    <string name="sleep_hint_ok">Justo en el rango saludable de 7 a 9 horas.</string>
+    <string name="sleep_hint_long">Más de 9 horas. Dormir de más puede dejarte aturdido.</string>
+    <string name="stress_based_on_quiz">Basado en tu último quiz.</string>
+    <string name="stress_finish_quiz">Termina el quiz para una lectura actualizada (%1$d/%2$d respondidas).</string>
+    <string name="quiz_continue">Continuar el quiz</string>
+    <string name="quiz_retake_long">Repetir el quiz</string>
+    <string name="choose_month">Elige un mes</string>
+    <string name="reset_title">¿Borrar todos los datos?</string>
+    <string name="reset_body">Esto borra tus registros de ánimo, notas, etiquetas, tu sueño, el quiz, tu nombre y tus ajustes. No se puede deshacer.</string>
+    <string name="reset_confirm">Borrar todo</string>
+    <string name="stress_no_data">Sin datos todavía</string>
+    <string name="stress_no_data_text">Responde el quiz de %1$d preguntas para conocer tu nivel de estrés.</string>
+    <string name="quiz_start">Empezar el quiz</string>
+    <string name="cancel">Cancelar</string>
+    <string name="day_tags">¿Qué pasó?</string>
+    <string name="day_note">Nota</string>
+    <string name="day_note_hint">¿Algo que quieras recordar?</string>
+    <string name="day_note_counter">%1$d/%2$d</string>
+    <string name="day_add_tag">Nueva</string>
+    <string name="day_new_tag_hint">Nombre</string>
+    <string name="cd_add_tag">Crear etiqueta</string>
+    <string name="cd_confirm_tag">Agregar etiqueta</string>
+    <string name="tag_selected">Seleccionada</string>
+    <string name="tag_not_selected">Sin seleccionar</string>
+    <string name="tags_title">Tus etiquetas</string>
+    <string name="tags_presets">Incluidas</string>
+    <string name="tags_custom">Propias</string>
+    <string name="tags_custom_empty">Crea etiquetas para lo que se repite en tu vida: tu equipo, una materia, una persona.</string>
+    <string name="tags_limit">Llegaste al máximo de %1$d etiquetas.</string>
+    <string name="cd_delete_tag">Borrar %1$s</string>
+    <string name="cd_rename_tag">Renombrar %1$s</string>
+    <string name="tag_delete_confirm">¿Borrar «%1$s»?</string>
+    <plurals name="tag_delete_days">
+        <item quantity="one">Se quitará de %d día</item>
+        <item quantity="many">Se quitará de %d días</item>
+        <item quantity="other">Se quitará de %d días</item>
+    </plurals>
+    <string name="delete">Borrar</string>
+
+    <!-- Etiquetas incluidas (mismo orden que PresetTag) -->
+    <string name="tag_work">Trabajo</string>
+    <string name="tag_family">Familia</string>
+    <string name="tag_friends">Amigos</string>
+    <string name="tag_exercise">Ejercicio</string>
+    <string name="tag_poor_sleep">Dormí mal</string>
+    <string name="tag_study">Estudio</string>
+    <string name="tag_health">Salud</string>
+    <string name="tag_rest">Descanso</string>
+
+    <!-- Patrones: "%1$s registras %2$s %3$s." -->
+    <string name="patterns_title">Patrones</string>
+    <string name="pattern_sentence">%1$s registras %2$s %3$s.</string>
+    <string name="pattern_when_work">Los días de trabajo</string>
+    <string name="pattern_when_family">Los días con tu familia</string>
+    <string name="pattern_when_friends">Los días que ves a tus amigos</string>
+    <string name="pattern_when_exercise">Los días que haces ejercicio</string>
+    <string name="pattern_when_poor_sleep">Los días que duermes mal</string>
+    <string name="pattern_when_study">Los días de estudio</string>
+    <string name="pattern_when_health">Los días con temas de salud</string>
+    <string name="pattern_when_rest">Los días de descanso</string>
+    <string name="pattern_when_custom">Los días con «%1$s»</string>
+    <string name="pattern_when_short_sleep">Los días que duermes menos de 6 h</string>
+    <string name="mood_group_tense">Enojado o Estresado</string>
+    <string name="mood_group_good">Feliz o Tranquilo</string>
+    <string name="mood_group_low">Somnoliento o Aburrido</string>
+    <string name="pattern_mag_triple">el triple de veces</string>
+    <string name="pattern_mag_double">el doble de veces</string>
+    <string name="pattern_mag_more">más seguido</string>
+    <string name="pattern_mag_half">la mitad de veces</string>
+    <string name="pattern_mag_less">menos seguido</string>
+    <plurals name="pattern_based_on">
+        <item quantity="one">Basado en %d día</item>
+        <item quantity="many">Basado en %d días</item>
+        <item quantity="other">Basado en %d días</item>
+    </plurals>
+    <string name="patterns_disclaimer">Coincidencias en tus últimos 90 días, no causas.</string>
+    <plurals name="patterns_need_days">
+        <item quantity="one">Registra %d día más con etiquetas o sueño para descubrir patrones.</item>
+        <item quantity="many">Registra %d días más con etiquetas o sueño para descubrir patrones.</item>
+        <item quantity="other">Registra %d días más con etiquetas o sueño para descubrir patrones.</item>
+    </plurals>
+    <string name="patterns_none_yet">Aún no hay patrones claros. Sigue agregando etiquetas y sueño a tus días.</string>
+
+    <!-- Avisos -->
+    <string name="toast_mood_logged">Ánimo registrado</string>
+    <string name="toast_already_logged">Ya lo registraste</string>
+    <string name="toast_mood_saved">Ánimo guardado</string>
+    <string name="toast_entry_cleared">Registro borrado</string>
+    <string name="toast_quiz_done">Quiz completado</string>
+    <string name="toast_stress_level">Nivel de estrés: %1$s</string>
+    <string name="toast_sleep_saved">Sueño guardado</string>
+    <string name="toast_sleep_sub">%1$dh %2$dmin anoche</string>
+    <string name="toast_not_yet">Aún no</string>
+    <string name="toast_future">Solo puedes registrar días hasta hoy</string>
+    <string name="toast_reset">Datos borrados</string>
+    <string name="toast_reset_sub">Empezamos de cero</string>
+    <string name="toast_reminder_set">Recordatorio activado</string>
+    <string name="toast_reminder_at">Todos los días a las %1$s</string>
+    <string name="toast_notifications_off">Notificaciones desactivadas</string>
+    <string name="toast_notifications_off_sub">Actívalas en los ajustes del sistema</string>
+
+    <!-- Registro rápido: notificación y widget -->
+    <string name="reminder_channel">Recordatorio diario</string>
+    <string name="reminder_title">¿Cómo te sientes hoy, %1$s?</string>
+    <string name="reminder_title_anon">¿Cómo te sientes hoy?</string>
+    <string name="reminder_text">Toca una cara para registrarlo.</string>
+    <string name="cd_quick_log">Registrar %1$s</string>
+    <string name="widget_label">Ánimo de hoy</string>
+    <string name="widget_description">Registra tu ánimo con un toque</string>
+    <string name="toast_on">Activado</string>
+    <string name="toast_off">Desactivado</string>
+    <string name="toast_date_mood">%1$s · %2$s</string>
+
+    <string-array name="months">
+        <item>enero</item>
+        <item>febrero</item>
+        <item>marzo</item>
+        <item>abril</item>
+        <item>mayo</item>
+        <item>junio</item>
+        <item>julio</item>
+        <item>agosto</item>
+        <item>septiembre</item>
+        <item>octubre</item>
+        <item>noviembre</item>
+        <item>diciembre</item>
+    </string-array>
+    <string-array name="months_short">
+        <item>ene</item>
+        <item>feb</item>
+        <item>mar</item>
+        <item>abr</item>
+        <item>may</item>
+        <item>jun</item>
+        <item>jul</item>
+        <item>ago</item>
+        <item>sep</item>
+        <item>oct</item>
+        <item>nov</item>
+        <item>dic</item>
+    </string-array>
+    <!-- Empieza en domingo, igual que el calendario -->
+    <string-array name="weekdays_short">
+        <item>Dom</item>
+        <item>Lun</item>
+        <item>Mar</item>
+        <item>Mié</item>
+        <item>Jue</item>
+        <item>Vie</item>
+        <item>Sáb</item>
+    </string-array>
+    <string-array name="weekdays_full">
+        <item>Domingo</item>
+        <item>Lunes</item>
+        <item>Martes</item>
+        <item>Miércoles</item>
+        <item>Jueves</item>
+        <item>Viernes</item>
+        <item>Sábado</item>
+    </string-array>
+</resources>

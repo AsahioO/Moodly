@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Notificación expandida: pregunta + caras (las caras se agregan en código a @id/faces). -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:textAppearance="@android:style/TextAppearance.Material.Notification.Title" />
+
+    <FrameLayout
+        android:id="@+id/faces"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>

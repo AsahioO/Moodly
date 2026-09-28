@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generado desde MoodGlyphs.icon(): si cambias una cara allá, cámbiala aquí. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="40dp"
+    android:height="40dp"
+    android:viewportWidth="40"
+    android:viewportHeight="40">
+    <path android:fillColor="#FFA9E3" android:pathData="M16.5,1.5h7a15,15 0 0,1 15,15v7a15,15 0 0,1 -15,15h-7a15,15 0 0,1 -15,-15v-7a15,15 0 0,1 15,-15z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M10.1,18a3.9,3.9 0 1,0 7.8,0a3.9,3.9 0 1,0 -7.8,0z" />
+    <path android:pathData="M10.1,18a3.9,3.9 0 1,0 7.8,0a3.9,3.9 0 1,0 -7.8,0z" android:strokeColor="#141414" android:strokeWidth="1.8"
+        android:strokeLineCap="round" android:strokeLineJoin="round" />
+    <path android:fillColor="#FFFFFF" android:pathData="M22.1,18a3.9,3.9 0 1,0 7.8,0a3.9,3.9 0 1,0 -7.8,0z" />
+    <path android:pathData="M22.1,18a3.9,3.9 0 1,0 7.8,0a3.9,3.9 0 1,0 -7.8,0z" android:strokeColor="#141414" android:strokeWidth="1.8"
+        android:strokeLineCap="round" android:strokeLineJoin="round" />
+    <path android:fillColor="#141414" android:pathData="M13.4,16.9a1.7,1.7 0 1,0 3.4,0a1.7,1.7 0 1,0 -3.4,0z" />
+    <path android:fillColor="#141414" android:pathData="M25.4,16.9a1.7,1.7 0 1,0 3.4,0a1.7,1.7 0 1,0 -3.4,0z" />
+    <path android:pathData="M15.5 28h9" android:strokeColor="#141414" android:strokeWidth="2.4"
+        android:strokeLineCap="round" android:strokeLineJoin="round" />
+</vector>

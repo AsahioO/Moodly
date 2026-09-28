@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ícono pequeño de notificación: carita feliz monocromática. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    <path
+        android:pathData="M6,50a44,44 0,1 0,88 0a44,44 0,1 0,-88 0z"
+        android:strokeWidth="9"
+        android:strokeColor="#FFFFFFFF" />
+    <path
+        android:pathData="M28,45q7.5,7 15,0M57,45q7.5,7 15,0M33,62q17,15 34,0"
+        android:strokeWidth="9"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeLineCap="round" />
+</vector>

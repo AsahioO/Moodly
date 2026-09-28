@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generado desde MoodGlyphs.icon(): si cambias una cara allá, cámbiala aquí. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="40dp"
+    android:height="40dp"
+    android:viewportWidth="40"
+    android:viewportHeight="40">
+    <path android:fillColor="#A9C8FF" android:pathData="M20 1.5c11 0 18.5 8 18.5 18.5S30.5 38.5 19.5 38.5 1.5 31 1.5 20.5 9 1.5 20 1.5z" />
+    <path android:pathData="M11 18q3 2.5 6 0M23 18q3 2.5 6 0" android:strokeColor="#141414" android:strokeWidth="2.4"
+        android:strokeLineCap="round" android:strokeLineJoin="round" />
+    <path android:pathData="M17.9,26.5a2.1,2.1 0 1,0 4.2,0a2.1,2.1 0 1,0 -4.2,0z" android:strokeColor="#141414" android:strokeWidth="2.4"
+        android:strokeLineCap="round" android:strokeLineJoin="round" />
+</vector>

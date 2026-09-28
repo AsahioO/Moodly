@@ -1,0 +1,19 @@
+# Graphify — solo código relevante, excluye generados/locales
+# (.gitignore ya se respeta; esto es extra para el grafo)
+build/
+app/build/
+.gradle/
+.idea/
+.kotlin/
+captures/
+.externalNativeBuild/
+.cxx/
+*.iml
+.DS_Store
+local.properties
+gradle/wrapper/gradle-wrapper.jar
+*.hprof
+*.bin
+graphify-out/cache/
+graphify-out/converted/
+raw/
