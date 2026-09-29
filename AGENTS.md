@@ -63,4 +63,5 @@ Grafo en `graphify-out/` (code-only, offline). Para preguntas de código, primer
 `graphify query "<pregunta>"`; `graphify path "<A>" "<B>"` para relaciones,
 `graphify explain "<concepto>"` para un foco. `GRAPH_REPORT.md` solo para revisión
 amplia de arquitectura. Tras modificar código: `graphify update .`. Tras `git pull`:
-`graphify update .` también. Archivos `graphify-out/` sucios tras hooks son normales.
+`graphify update .` también. `graphify-out/` está gitignored y se regenera en cada
+máquina (cada clon corre `graphify extract . --code-only` una vez).
