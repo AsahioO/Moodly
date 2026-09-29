@@ -156,3 +156,23 @@ class TagsTest {
         assertEquals(AppData.MAX_TAG_LENGTH, normalizeTagLabel("a".repeat(50)).length)
     }
 }
+
+class StreakTest {
+    private val today = LocalDate.of(2026, 9, 28)
+    private fun logged(vararg daysAgo: Long) = daysAgo.associate { today.minusDays(it).toString() to Mood.HAPPY }
+
+    @Test
+    fun empty_isZero() = assertEquals(0, MoodStats.streak(emptyMap(), today))
+
+    @Test
+    fun todayAndYesterday_isTwo() = assertEquals(2, MoodStats.streak(logged(0, 1), today))
+
+    @Test
+    fun todayMissing_countsFromYesterday() = assertEquals(3, MoodStats.streak(logged(1, 2, 3), today))
+
+    @Test
+    fun gap_breaksStreak() = assertEquals(1, MoodStats.streak(logged(0, 2, 3), today))
+
+    @Test
+    fun onlyOlderDays_isZero() = assertEquals(0, MoodStats.streak(logged(2, 3), today))
+}

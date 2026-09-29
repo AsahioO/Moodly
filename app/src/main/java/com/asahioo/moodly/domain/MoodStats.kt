@@ -51,4 +51,18 @@ object MoodStats {
             discipline = if (elapsed == 0) 0 else (logged * 100f / elapsed).roundToInt(),
         )
     }
+
+    /**
+     * Días consecutivos con registro que terminan hoy. Si hoy aún no hay registro cuenta desde
+     * ayer, para que la racha no caiga a 0 mientras el día sigue abierto.
+     */
+    fun streak(moods: Map<String, Mood>, today: LocalDate): Int {
+        var day = if (moods.containsKey(today.toString())) today else today.minusDays(1)
+        var count = 0
+        while (moods.containsKey(day.toString())) {
+            count++
+            day = day.minusDays(1)
+        }
+        return count
+    }
 }
