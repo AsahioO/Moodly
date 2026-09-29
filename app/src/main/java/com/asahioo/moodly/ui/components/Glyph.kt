@@ -83,6 +83,29 @@ class GGroup(val rotation: Float, val pivotX: Float, val pivotY: Float, val item
 @Immutable
 class GLook(val depth: Float, val items: List<GlyphItem>, val blinkPivotY: Float? = null) : GlyphItem
 
+/** Rasgo animable por separado: se transforma con lo que [GlyphParts] dé para su [slot]. */
+@Immutable
+class GPart(val slot: Int, val pivotX: Float, val pivotY: Float, val items: List<GlyphItem>) : GlyphItem
+
+/** Transformación de un [GPart], en unidades del viewBox; escala y giro sobre su pivote. */
+data class Part(
+    val dx: Float = 0f,
+    val dy: Float = 0f,
+    val sx: Float = 1f,
+    val sy: Float = 1f,
+    val rotation: Float = 0f,
+) {
+    companion object {
+        val Rest = Part()
+    }
+}
+
+fun interface GlyphParts {
+    fun part(slot: Int): Part
+}
+
+private val NoParts = GlyphParts { Part.Rest }
+
 /** Dibujo en coordenadas de un viewBox de [width] x [height]. */
 @Immutable
 class GlyphSpec(val width: Float, val height: Float, val items: List<GlyphItem>) {
@@ -92,7 +115,13 @@ class GlyphSpec(val width: Float, val height: Float, val items: List<GlyphItem>)
 }
 
 /** [look] en [-1, 1] (hacia dónde mira la cara); [blink] en [0, 1] (1 = ojos cerrados). */
-fun DrawScope.drawGlyph(spec: GlyphSpec, tint: Color = Palette.Ink, look: Offset = Offset.Zero, blink: Float = 0f) {
+fun DrawScope.drawGlyph(
+    spec: GlyphSpec,
+    tint: Color = Palette.Ink,
+    look: Offset = Offset.Zero,
+    blink: Float = 0f,
+    parts: GlyphParts = NoParts,
+) {
     val k = min(size.width / spec.width, size.height / spec.height)
     val dx = (size.width - spec.width * k) / 2f
     val dy = (size.height - spec.height * k) / 2f
@@ -100,13 +129,13 @@ fun DrawScope.drawGlyph(spec: GlyphSpec, tint: Color = Palette.Ink, look: Offset
         translate(dx, dy)
         scale(k, k, pivot = Offset.Zero)
     }) {
-        spec.items.forEach { drawItem(it, tint, look, blink) }
+        spec.items.forEach { drawItem(it, tint, look, blink, parts) }
     }
 }
 
 private fun Color.or(tint: Color): Color = if (isSpecified) this else tint
 
-private fun DrawScope.drawItem(item: GlyphItem, tint: Color, look: Offset, blink: Float) {
+private fun DrawScope.drawItem(item: GlyphItem, tint: Color, look: Offset, blink: Float, parts: GlyphParts) {
     when (item) {
         is GFill -> drawPath(item.path, item.color.or(tint))
         is GStroke -> drawPath(item.path, item.color.or(tint), style = item.style)
@@ -134,13 +163,28 @@ private fun DrawScope.drawItem(item: GlyphItem, tint: Color, look: Offset, blink
             val c = cos(r).toFloat()
             val s = sin(r).toFloat()
             val local = Offset(look.x * c - look.y * s, look.x * s + look.y * c)
-            item.items.forEach { drawItem(it, tint, local, blink) }
+            item.items.forEach { drawItem(it, tint, local, blink, parts) }
         }
         is GLook -> withTransform({
             translate(look.x * item.depth, look.y * item.depth)
             item.blinkPivotY?.let { scale(1f, 1f - blink * 0.9f, pivot = Offset(0f, it)) }
         }) {
-            item.items.forEach { drawItem(it, tint, look, blink) }
+            item.items.forEach { drawItem(it, tint, look, blink, parts) }
+        }
+        is GPart -> {
+            val p = parts.part(item.slot)
+            if (p == Part.Rest) {
+                item.items.forEach { drawItem(it, tint, look, blink, parts) }
+            } else {
+                val pivot = Offset(item.pivotX, item.pivotY)
+                withTransform({
+                    translate(p.dx, p.dy)
+                    rotate(p.rotation, pivot)
+                    scale(p.sx, p.sy, pivot)
+                }) {
+                    item.items.forEach { drawItem(it, tint, look, blink, parts) }
+                }
+            }
         }
     }
 }
@@ -153,6 +197,7 @@ fun Glyph(
     tint: Color = Palette.Ink,
     look: () -> Offset = { Offset.Zero },
     blink: () -> Float = { 0f },
+    parts: () -> GlyphParts = { NoParts },
 ) {
-    Spacer(modifier.drawBehind { drawGlyph(spec, tint, look(), blink()) })
+    Spacer(modifier.drawBehind { drawGlyph(spec, tint, look(), blink(), parts()) })
 }

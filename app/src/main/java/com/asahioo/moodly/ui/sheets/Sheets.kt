@@ -69,7 +69,7 @@ import com.asahioo.moodly.data.model.StressLevel
 import com.asahioo.moodly.ui.calendar.MonthOption
 import com.asahioo.moodly.ui.color
 import com.asahioo.moodly.ui.components.LocalHaptics
-import com.asahioo.moodly.ui.components.MoodIcon
+import com.asahioo.moodly.ui.components.AnimatedMoodIcon
 import com.asahioo.moodly.ui.components.MoodTimePicker
 import com.asahioo.moodly.ui.components.PrimaryButton
 import com.asahioo.moodly.ui.components.RollingText
@@ -367,7 +367,7 @@ private fun MoodTile(mood: Mood, selected: Boolean, modifier: Modifier, onClick:
             .padding(horizontal = 8.dp, vertical = 14.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        MoodIcon(mood, Modifier.size(46.dp))
+        AnimatedMoodIcon(mood, active = selected, modifier = Modifier.size(46.dp))
         Text(
             label,
             style = MoodType.Chip.copy(color = fg),

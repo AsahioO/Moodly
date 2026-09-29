@@ -84,7 +84,7 @@ import com.asahioo.moodly.ui.components.CardShape
 import com.asahioo.moodly.ui.components.CircleIconButton
 import com.asahioo.moodly.ui.components.EmptyValue
 import com.asahioo.moodly.ui.components.Glyph
-import com.asahioo.moodly.ui.components.MoodIcon
+import com.asahioo.moodly.ui.components.AnimatedMoodIcon
 import com.asahioo.moodly.ui.components.PanelShape
 import com.asahioo.moodly.ui.components.RollingText
 import com.asahioo.moodly.ui.components.Stagger
@@ -331,9 +331,10 @@ private fun MoodChip(mood: Mood, selected: Boolean, onClick: () -> Unit, modifie
         ) {
             Text(label, style = MoodType.Chip.copy(color = fg))
         }
-        MoodIcon(
+        AnimatedMoodIcon(
             mood,
-            Modifier
+            active = selected,
+            modifier = Modifier
                 .align(Alignment.TopEnd)
                 .offset(x = 8.dp, y = (-15).dp)
                 .size(27.dp)
