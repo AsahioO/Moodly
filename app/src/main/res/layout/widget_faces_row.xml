@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Fila de 6 caras del widget: a diferencia de mood_faces, crece con el alto disponible. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/face_happy"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/mood_happy"
+        android:padding="3dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_mood_happy" />
+
+    <ImageView
+        android:id="@+id/face_angry"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/mood_angry"
+        android:padding="3dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_mood_angry" />
+
+    <ImageView
+        android:id="@+id/face_sleepy"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/mood_sleepy"
+        android:padding="3dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_mood_sleepy" />
+
+    <ImageView
+        android:id="@+id/face_bored"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/mood_bored"
+        android:padding="3dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_mood_bored" />
+
+    <ImageView
+        android:id="@+id/face_calm"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/mood_calm"
+        android:padding="3dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_mood_calm" />
+
+    <ImageView
+        android:id="@+id/face_stressed"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/mood_stressed"
+        android:padding="3dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_mood_stressed" />
+</LinearLayout>

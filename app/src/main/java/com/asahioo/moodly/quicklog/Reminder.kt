@@ -65,12 +65,6 @@ internal fun showReminder(context: Context, userName: String) {
     } else {
         context.getString(R.string.reminder_title, firstName)
     }
-    val open = PendingIntent.getActivity(
-        context,
-        0,
-        Intent(context, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP),
-        PendingIntent.FLAG_IMMUTABLE,
-    )
     // Las acciones estándar solo muestran texto y caben 3; por eso las 6 caras van en una vista propia.
     val faces = viewsWithFaces(context, R.layout.notification_mood_big, null)
         .apply { setTextViewText(R.id.title, title) }
@@ -82,9 +76,17 @@ internal fun showReminder(context: Context, userName: String) {
         .setCustomContentView(viewsWithFaces(context, R.layout.notification_mood_compact, null))
         .setCustomBigContentView(faces)
         .setCustomHeadsUpContentView(faces)
-        .setContentIntent(open)
+        .setContentIntent(openAppIntent(context))
         .setAutoCancel(true)
         .setCategory(NotificationCompat.CATEGORY_REMINDER)
         .build()
     manager.notify(REMINDER_NOTIFICATION_ID, notification)
 }
+
+/** Abre la app; lo usan la notificación y el widget. */
+internal fun openAppIntent(context: Context): PendingIntent = PendingIntent.getActivity(
+    context,
+    0,
+    Intent(context, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP),
+    PendingIntent.FLAG_IMMUTABLE,
+)

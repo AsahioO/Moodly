@@ -4,4 +4,5 @@
     <color name="ink">#FF141414</color>
     <color name="lavender_page">#FFE8E3F0</color>
     <color name="mood_happy">#FFA6EB8C</color>
+    <color name="ink_muted">#99141414</color>
 </resources>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Un día de la tira semanal del widget grande; la cara escala con el alto disponible. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/day_root"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_marginHorizontal="1dp"
+    android:layout_weight="1"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="4dp">
+
+    <TextView
+        android:id="@+id/day_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_tight_medium"
+        android:textColor="@color/ink"
+        android:textSize="11sp" />
+
+    <ImageView
+        android:id="@+id/day_face"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="3dp"
+        android:layout_weight="1"
+        android:scaleType="fitCenter" />
+</LinearLayout>

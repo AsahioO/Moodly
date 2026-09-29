@@ -263,6 +263,11 @@
     <string name="cd_quick_log">Registrar %1$s</string>
     <string name="widget_label">Ánimo de hoy</string>
     <string name="widget_description">Registra tu ánimo con un toque</string>
+    <string name="widget_logged">Ánimo registrado</string>
+    <string name="widget_change">Cambiar</string>
+    <string name="widget_add_note">Añadir nota</string>
+    <string name="cd_widget_day">%1$s: %2$s</string>
+    <string name="widget_day_empty">sin registro</string>
     <string name="toast_on">Activado</string>
     <string name="toast_off">Desactivado</string>
     <string name="toast_date_mood">%1$s · %2$s</string>

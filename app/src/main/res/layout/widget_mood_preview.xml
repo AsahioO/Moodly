@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Vista previa del selector de widgets (Android 12+). -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/widget_bg"
-    android:padding="10dp">
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:padding="14dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:fontFamily="@font/inter_tight_semibold"
+        android:text="@string/reminder_title_anon"
+        android:textColor="@color/ink"
+        android:textSize="15sp" />
 
     <include
         layout="@layout/mood_faces"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:layout_gravity="center_vertical" />
-</FrameLayout>
+        android:layout_height="44dp" />
+</LinearLayout>

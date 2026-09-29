@@ -25,13 +25,16 @@ class MoodlyApplication : Application() {
                 }
         }
         // Un solo lugar mantiene al día el widget, venga el registro de Inicio, Calendario o un reset.
-        // ponytail: el resaltado cambia al registrar y con el recordatorio diario, no justo a medianoche.
+        // Racha y tira semanal dependen de todos los días, no solo de hoy; el cambio de día lo cubre
+        // DATE_CHANGED en QuickLogReceiver.
         container.appScope.launch {
-            data.map { it.moods[container.dateProvider.today().toString()] }
+            data.map { it.moods to it.userName }
                 .distinctUntilChanged()
-                .collect { mood ->
-                    MoodWidget.refresh(this@MoodlyApplication, mood)
-                    if (mood != null) NotificationManagerCompat.from(this@MoodlyApplication).cancel(REMINDER_NOTIFICATION_ID)
+                .collect { (moods, _) ->
+                    MoodWidget.refresh(this@MoodlyApplication)
+                    if (moods[container.dateProvider.today().toString()] != null) {
+                        NotificationManagerCompat.from(this@MoodlyApplication).cancel(REMINDER_NOTIFICATION_ID)
+                    }
                 }
         }
     }
