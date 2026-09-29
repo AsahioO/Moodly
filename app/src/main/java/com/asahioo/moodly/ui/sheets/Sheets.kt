@@ -380,7 +380,7 @@ private fun MoodTile(mood: Mood, selected: Boolean, modifier: Modifier, onClick:
 /* ---------------------------------------- Sueño ---------------------------------------- */
 
 @Composable
-fun SleepSheet(initialMinutes: Int, onSave: (Int) -> Unit) {
+fun SleepSheet(initialMinutes: Int, fromHealth: Boolean, onSave: (Int) -> Unit) {
     var minutes by rememberSaveable { mutableIntStateOf(initialMinutes) }
     val bump = remember { Animatable(1f) }
     val scope = rememberCoroutineScope()
@@ -394,6 +394,13 @@ fun SleepSheet(initialMinutes: Int, onSave: (Int) -> Unit) {
 
     Column {
         SheetHeader(stringResource(R.string.last_night), stringResource(R.string.sleep_duration))
+        if (fromHealth) {
+            Text(
+                stringResource(R.string.sleep_from_health),
+                style = MoodType.Caption,
+                modifier = Modifier.padding(top = 6.dp),
+            )
+        }
         Row(
             Modifier
                 .fillMaxWidth()

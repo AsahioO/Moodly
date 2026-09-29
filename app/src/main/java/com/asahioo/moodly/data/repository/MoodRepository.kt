@@ -4,6 +4,7 @@ import com.asahioo.moodly.data.local.MoodLocalDataSource
 import com.asahioo.moodly.data.model.AppData
 import com.asahioo.moodly.data.model.CustomTag
 import com.asahioo.moodly.data.model.DayContext
+import com.asahioo.moodly.data.model.HealthDay
 import com.asahioo.moodly.data.model.Mood
 import com.asahioo.moodly.data.model.PresetTag
 import com.asahioo.moodly.data.model.QuizProgress
@@ -20,12 +21,15 @@ import java.util.UUID
 interface MoodRepository {
     val data: Flow<AppData>
 
-    /** Con [mood] null borra el registro del día (ánimo, nota y etiquetas; conserva el sueño). */
+    /** Con [mood] null borra el registro del día (ánimo, nota y etiquetas; conserva sueño y pasos). */
     suspend fun setMood(date: LocalDate, mood: Mood?)
 
     /** Guarda ánimo, nota y etiquetas del día en una sola escritura. */
     suspend fun saveDay(date: LocalDate, mood: Mood, note: String, tags: Set<PresetTag>, customTags: Set<String>)
     suspend fun setSleep(date: LocalDate, minutes: Int)
+
+    /** Importa lo leído de Health Connect en una sola escritura. No pisa el sueño manual. */
+    suspend fun importHealth(days: Map<LocalDate, HealthDay>)
 
     /** Devuelve el id de la etiqueta (la existente si ya hay una igual) o null si no es válida o no cabe. */
     suspend fun addCustomTag(label: String): String?
@@ -55,8 +59,8 @@ class DefaultMoodRepository(private val local: MoodLocalDataSource) : MoodReposi
         val key = date.toString()
         local.update { d ->
             if (mood != null) return@update d.copy(moods = d.moods + (key to mood))
-            val sleep = d.days[key]?.sleepMinutes
-            d.copy(moods = d.moods - key, days = d.days.with(key, DayContext(sleepMinutes = sleep)))
+            val kept = (d.days[key] ?: DayContext()).copy(note = "", tags = emptySet(), customTags = emptySet())
+            d.copy(moods = d.moods - key, days = d.days.with(key, kept))
         }
     }
 
@@ -82,7 +86,21 @@ class DefaultMoodRepository(private val local: MoodLocalDataSource) : MoodReposi
     override suspend fun setSleep(date: LocalDate, minutes: Int) {
         val key = date.toString()
         val clamped = minutes.coerceIn(AppData.MIN_SLEEP_MINUTES, AppData.MAX_SLEEP_MINUTES)
-        local.update { d -> d.copy(days = d.days.with(key, (d.days[key] ?: DayContext()).copy(sleepMinutes = clamped))) }
+        local.update { d ->
+            val context = (d.days[key] ?: DayContext()).copy(sleepMinutes = clamped, sleepFromHealth = false)
+            d.copy(days = d.days.with(key, context))
+        }
+    }
+
+    override suspend fun importHealth(days: Map<LocalDate, HealthDay>) {
+        if (days.isEmpty()) return
+        local.update { d ->
+            val merged = days.entries.fold(d.days) { acc, (date, health) ->
+                val key = date.toString()
+                acc.with(key, (acc[key] ?: DayContext()).withHealth(health))
+            }
+            if (merged == d.days) d else d.copy(days = merged)
+        }
     }
 
     override suspend fun addCustomTag(label: String): String? {

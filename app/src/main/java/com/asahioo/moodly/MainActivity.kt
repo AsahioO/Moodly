@@ -11,6 +11,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.asahioo.moodly.ui.AppViewModel
 import com.asahioo.moodly.ui.MoodlyRoot
 import com.asahioo.moodly.ui.theme.MoodlyTheme
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
@@ -30,6 +31,16 @@ class MainActivity : ComponentActivity() {
             MoodlyTheme {
                 MoodlyRoot(appViewModel)
             }
+        }
+    }
+
+    /** Al abrir o volver a la app: Health Connect solo se lee en primer plano. */
+    override fun onResume() {
+        super.onResume()
+        val container = (application as MoodlyApplication).container
+        container.appScope.launch {
+            container.health.refresh()
+            container.health.sync()
         }
     }
 }

@@ -30,6 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.asahioo.moodly.R
+import com.asahioo.moodly.data.health.HealthStatus
 import com.asahioo.moodly.data.model.Settings
 import com.asahioo.moodly.ui.components.AppIcons
 import com.asahioo.moodly.ui.components.Avatar
@@ -58,6 +59,9 @@ fun SettingsScreen(
     onReduceMotionChange: (Boolean) -> Unit,
     onReminderChange: (Boolean) -> Unit,
     onPickReminderTime: () -> Unit,
+    health: HealthStatus,
+    onHealthChange: (Boolean) -> Unit,
+    onInstallHealth: () -> Unit,
     customTagCount: Int,
     onManageTags: () -> Unit,
     onReplayIntro: () -> Unit,
@@ -148,8 +152,33 @@ fun SettingsScreen(
                     )
                 }
 
-                SectionTitle(stringResource(R.string.app_section), Modifier.staggered(pop, 280, 500, 12.dp))
+                SectionTitle(stringResource(R.string.health_section), Modifier.staggered(pop, 280, 500, 12.dp))
                 Group(Modifier.staggered(pop, 320, 600, 20.dp, easing = Motion.Navigation)) {
+                    when (health) {
+                        HealthStatus.Unavailable -> Text(
+                            stringResource(R.string.health_unavailable),
+                            style = MoodType.Caption,
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 18.dp),
+                        )
+                        HealthStatus.NeedsUpdate -> ActionRow(stringResource(R.string.health_update), Palette.Ink, onInstallHealth)
+                        HealthStatus.Disconnected, is HealthStatus.Connected -> ToggleRow(
+                            title = stringResource(R.string.health_connect),
+                            subtitle = stringResource(
+                                when {
+                                    health !is HealthStatus.Connected -> R.string.health_sub_off
+                                    health.sleep && health.steps -> R.string.health_sub_both
+                                    health.sleep -> R.string.health_sub_sleep
+                                    else -> R.string.health_sub_steps
+                                }
+                            ),
+                            checked = health is HealthStatus.Connected,
+                            onChange = onHealthChange,
+                        )
+                    }
+                }
+
+                SectionTitle(stringResource(R.string.app_section), Modifier.staggered(pop, 320, 500, 12.dp))
+                Group(Modifier.staggered(pop, 360, 600, 20.dp, easing = Motion.Navigation)) {
                     ActionRow(
                         title = stringResource(R.string.tags_setting),
                         color = Palette.Ink,

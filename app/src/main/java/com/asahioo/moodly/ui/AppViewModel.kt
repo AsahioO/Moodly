@@ -2,6 +2,8 @@ package com.asahioo.moodly.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.asahioo.moodly.data.health.HealthConnect
+import com.asahioo.moodly.data.health.HealthStatus
 import com.asahioo.moodly.data.model.CustomTag
 import com.asahioo.moodly.data.model.DayContext
 import com.asahioo.moodly.data.model.Mood
@@ -30,7 +32,10 @@ data class AppUiState(
  * Estado global: arranque, onboarding y ajustes. La alarma del recordatorio se sincroniza sola
  * a partir de [Settings] (ver MoodlyApplication), así que aquí solo se guardan preferencias.
  */
-class AppViewModel(private val repository: MoodRepository) : ViewModel() {
+class AppViewModel(
+    private val repository: MoodRepository,
+    private val health: HealthConnect,
+) : ViewModel() {
 
     val uiState: StateFlow<AppUiState> = repository.data
         .map { d ->
@@ -63,7 +68,20 @@ class AppViewModel(private val repository: MoodRepository) : ViewModel() {
     fun setReminderTime(minutes: Int) = launchSet {
         repository.updateSettings { it.copy(reminderEnabled = true, reminderMinutes = minutes) }
     }
-    fun resetAll() = launchSet { repository.resetAll() }
+    /** Si Health Connect siguiera conectado, el siguiente resume reimportaría días en la app vacía. */
+    fun resetAll() = launchSet {
+        health.disconnect()
+        repository.resetAll()
+    }
+
+    val healthStatus: StateFlow<HealthStatus> = health.status
+
+    /** Tras el diálogo de permisos: si concedió algo, rellena el último mes de una vez. */
+    fun onHealthPermissionsResult() = launchSet {
+        health.refresh()
+        health.sync(HealthConnect.BACKFILL_DAYS)
+    }
+    fun disconnectHealth() = launchSet { health.disconnect() }
 
     /** Suspende para que quien la crea pueda seleccionarla al momento. */
     suspend fun addTag(label: String): String? = repository.addCustomTag(label)
@@ -75,6 +93,6 @@ class AppViewModel(private val repository: MoodRepository) : ViewModel() {
     }
 
     companion object {
-        val Factory = containerViewModelFactory<AppViewModel> { AppViewModel(it.repository) }
+        val Factory = containerViewModelFactory<AppViewModel> { AppViewModel(it.repository, it.health) }
     }
 }

@@ -1,6 +1,7 @@
 package com.asahioo.moodly.di
 
 import android.content.Context
+import com.asahioo.moodly.data.health.HealthConnect
 import com.asahioo.moodly.data.local.MoodLocalDataSource
 import com.asahioo.moodly.data.repository.DefaultMoodRepository
 import com.asahioo.moodly.data.repository.MoodRepository
@@ -31,4 +32,6 @@ class AppContainer(context: Context) {
     val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     val reminders = ReminderScheduler(context)
+
+    val health = HealthConnect(context, repository, dateProvider)
 }

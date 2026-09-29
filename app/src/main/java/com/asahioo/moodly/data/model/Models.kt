@@ -26,10 +26,27 @@ data class DayContext(
     val customTags: Set<String> = emptySet(),
     /** Sueño de la noche anterior a este día. */
     val sleepMinutes: Int? = null,
+    /** true = [sleepMinutes] vino de Health Connect y otra sincronización puede actualizarlo. */
+    val sleepFromHealth: Boolean = false,
+    /** Pasos del día según Health Connect. */
+    val steps: Int? = null,
 ) {
     val hasEntry: Boolean get() = note.isNotEmpty() || tags.isNotEmpty() || customTags.isNotEmpty()
-    val isEmpty: Boolean get() = !hasEntry && sleepMinutes == null
+    val isEmpty: Boolean get() = !hasEntry && sleepMinutes == null && steps == null
+
+    /** Mezcla lo leído de Health Connect. El sueño manual nunca se pisa: es la corrección del usuario. */
+    fun withHealth(health: HealthDay): DayContext {
+        val sleep = health.sleepMinutes?.takeIf { it > 0 && (sleepMinutes == null || sleepFromHealth) }
+        return copy(
+            sleepMinutes = sleep ?: sleepMinutes,
+            sleepFromHealth = if (sleep != null) true else sleepFromHealth,
+            steps = health.steps?.takeIf { it > 0 } ?: steps,
+        )
+    }
 }
+
+/** Lo que Health Connect reporta para un día; null = sin dato. No se persiste tal cual. */
+data class HealthDay(val sleepMinutes: Int?, val steps: Int?)
 
 @Serializable
 data class Settings(

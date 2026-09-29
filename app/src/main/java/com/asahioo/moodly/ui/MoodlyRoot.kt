@@ -1,8 +1,11 @@
 package com.asahioo.moodly.ui
 
 import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.text.format.DateFormat
 import androidx.activity.compose.PredictiveBackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
@@ -40,12 +43,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
+import androidx.health.connect.client.PermissionController
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.asahioo.moodly.R
+import com.asahioo.moodly.data.health.HealthConnect
+import com.asahioo.moodly.data.health.HealthStatus
 import com.asahioo.moodly.data.model.AppData
 import com.asahioo.moodly.data.model.Mood
 import com.asahioo.moodly.ui.calendar.CalendarScreen
@@ -109,6 +115,20 @@ fun MoodlyRoot(appViewModel: AppViewModel) {
     val toast = remember { IslandToastState(scope) }
     val haptics = rememberHaptics(app.settings.haptics)
     val requestNotifications = rememberNotificationPermission()
+    val healthStatus by appViewModel.healthStatus.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val requestHealth = rememberLauncherForActivityResult(
+        PermissionController.createRequestPermissionResultContract(),
+    ) { granted ->
+        appViewModel.onHealthPermissionsResult()
+        toast.show(
+            ToastData(
+                ToastIcon.Check,
+                UiText.res(R.string.health_connect),
+                UiText.res(if (granted.isEmpty()) R.string.toast_health_denied else R.string.toast_health_connected),
+            )
+        )
+    }
     val is24Hour = DateFormat.is24HourFormat(LocalContext.current)
 
     var tab by rememberSaveable { mutableStateOf(Tab.Home) }
@@ -310,6 +330,27 @@ fun MoodlyRoot(appViewModel: AppViewModel) {
                                 }
                             },
                             onPickReminderTime = { sheet = SheetRequest.Reminder },
+                            health = healthStatus,
+                            onHealthChange = { enabled ->
+                                if (enabled) {
+                                    requestHealth.launch(HealthConnect.PERMISSIONS)
+                                } else {
+                                    appViewModel.disconnectHealth()
+                                    toast.show(
+                                        ToastData(
+                                            ToastIcon.Check,
+                                            UiText.res(R.string.health_connect),
+                                            UiText.res(R.string.toast_health_disconnected),
+                                        )
+                                    )
+                                }
+                            },
+                            onInstallHealth = {
+                                context.startActivity(
+                                    Intent(Intent.ACTION_VIEW, Uri.parse(HealthConnect.PLAY_STORE_URI))
+                                        .setPackage("com.android.vending")
+                                )
+                            },
                             customTagCount = app.customTags.size,
                             onManageTags = { sheet = SheetRequest.Tags },
                             onReplayIntro = appViewModel::replayOnboarding,
@@ -368,6 +409,7 @@ fun MoodlyRoot(appViewModel: AppViewModel) {
                     }
                     SheetRequest.Sleep -> SleepSheet(
                         initialMinutes = home.sleepMinutes ?: AppData.DEFAULT_SLEEP_MINUTES,
+                        fromHealth = home.todayContext?.sleepFromHealth == true,
                         onSave = { minutes ->
                             homeVm.setSleep(minutes)
                             haptics.confirm()

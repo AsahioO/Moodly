@@ -141,6 +141,20 @@
     <string name="reminder_daily_sub">Registra tu ánimo desde la notificación</string>
     <string name="reminder_time">Hora del recordatorio</string>
     <string name="tags_setting">Etiquetas</string>
+    <string name="health_section">Salud</string>
+    <string name="health_connect">Health Connect</string>
+    <string name="health_sub_off">Importa tu sueño y tus pasos automáticamente</string>
+    <string name="health_sub_both">Leyendo sueño y pasos</string>
+    <string name="health_sub_sleep">Leyendo sueño</string>
+    <string name="health_sub_steps">Leyendo pasos</string>
+    <string name="health_update">Instalar o actualizar Health Connect</string>
+    <string name="health_unavailable">Health Connect no está disponible en este dispositivo</string>
+    <string name="toast_health_connected">Sueño y pasos se importarán solos</string>
+    <string name="toast_health_denied">Sin permisos, nada que importar</string>
+    <string name="toast_health_disconnected">Lo ya importado se conserva</string>
+    <string name="health_rationale_title">Tus datos de salud en Moodly</string>
+    <string name="health_rationale_ok">Entendido</string>
+    <string name="health_rationale_body">Moodly lee de Health Connect solo tus pasos y la duración de tu sueño. Los usa para mostrarlos junto a tu ánimo y para encontrar patrones, como si duermes poco los días que te sientes estresado.\n\nMoodly nunca escribe en Health Connect ni envía estos datos a ningún lado: se guardan solo en este dispositivo.\n\nPuedes quitar el permiso cuando quieras desde Ajustes o desde Health Connect. Si corriges tu sueño a mano, se mantiene tu valor.</string>
     <string name="footer_local">Tus registros se guardan solo en este dispositivo.</string>
 
     <!-- Hojas -->
@@ -153,6 +167,7 @@
     <string name="less_15">15 minutos menos</string>
     <string name="more_15">15 minutos más</string>
     <string name="save">Guardar</string>
+    <string name="sleep_from_health">De Health Connect. Si lo cambias, se guarda tu valor.</string>
     <string name="sleep_hint_short">Un poco corto. La mayoría de los adultos necesita de 7 a 9 horas.</string>
     <string name="sleep_hint_ok">Justo en el rango saludable de 7 a 9 horas.</string>
     <string name="sleep_hint_long">Más de 9 horas. Dormir de más puede dejarte aturdido.</string>
