@@ -20,6 +20,7 @@ sealed interface Factor {
     data class Preset(val tag: PresetTag) : Factor
     data class Custom(val tag: CustomTag) : Factor
     data object ShortSleep : Factor
+    data object FewSteps : Factor
 }
 
 /** Cuántas veces más (o menos) aparece el grupo los días con el factor. */
@@ -42,6 +43,7 @@ object MoodPatterns {
     const val WINDOW_DAYS = 90L
     const val MIN_SAMPLE = 10
     const val SHORT_SLEEP_MINUTES = 360
+    const val FEW_STEPS = 5_000
     private const val MIN_SIDE = 3
     private const val MIN_HITS = 2
     private const val MIN_RATIO = 1.5
@@ -68,6 +70,9 @@ object MoodPatterns {
             // Los días sin sueño registrado no cuentan como "durmió bien".
             val slept = sample.filter { it.context?.sleepMinutes != null }
             add(Factor.ShortSleep to slept.partition { it.context!!.sleepMinutes!! < SHORT_SLEEP_MINUTES })
+            // Igual con los pasos: sin dato de Health Connect el día no cuenta.
+            val walked = sample.filter { it.context?.steps != null }
+            add(Factor.FewSteps to walked.partition { it.context!!.steps!! < FEW_STEPS })
         }
 
         val patterns = splits.mapNotNull { (factor, split) ->

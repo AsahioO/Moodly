@@ -231,6 +231,7 @@
     <string name="pattern_when_rest">Los días de descanso</string>
     <string name="pattern_when_custom">Los días con «%1$s»</string>
     <string name="pattern_when_short_sleep">Los días que duermes menos de 6 h</string>
+    <string name="pattern_when_few_steps">Los días que caminas menos de 5000 pasos</string>
     <string name="mood_group_tense">Enojado o Estresado</string>
     <string name="mood_group_good">Feliz o Tranquilo</string>
     <string name="mood_group_low">Somnoliento o Aburrido</string>

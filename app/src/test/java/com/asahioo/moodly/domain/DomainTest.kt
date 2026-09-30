@@ -96,6 +96,27 @@ class MoodPatternsTest {
         assertTrue(result.patterns.none { it.factor == Factor.ShortSleep })
     }
 
+    private fun walked(steps: Int) = DayContext(steps = steps)
+
+    @Test
+    fun fewSteps_withTenseMoods_isDetected() {
+        val few = List(4) { Mood.ANGRY to walked(2_000) } + (Mood.HAPPY to walked(3_000))
+        val many = List(4) { Mood.STRESSED to walked(9_000) } + List(16) { Mood.CALM to walked(9_000) }
+        val result = MoodPatterns.find(data(*(few + many).toTypedArray()), today)
+        val pattern = result.patterns.single { it.factor == Factor.FewSteps }
+        assertEquals(MoodGroup.TENSE, pattern.group)
+        assertEquals(Magnitude.TRIPLE, pattern.magnitude)
+        assertEquals(5, pattern.daysWith)
+    }
+
+    @Test
+    fun daysWithoutSteps_doNotCountAsManySteps() {
+        val days = List(5) { Mood.ANGRY to walked(2_000) } + List(3) { Mood.ANGRY to walked(9_000) } +
+            List(20) { Mood.CALM to DayContext(note = "x") }
+        val result = MoodPatterns.find(data(*days.toTypedArray()), today)
+        assertTrue(result.patterns.none { it.factor == Factor.FewSteps })
+    }
+
     @Test
     fun exercise_withFewerTenseDays_isHalf() {
         val exercise = DayContext(tags = setOf(PresetTag.EXERCISE))

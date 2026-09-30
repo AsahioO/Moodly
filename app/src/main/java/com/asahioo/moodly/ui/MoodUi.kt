@@ -140,6 +140,7 @@ fun Pattern.sentence(): String {
         is Factor.Preset -> stringResource(factor.tag.whenRes)
         is Factor.Custom -> stringResource(R.string.pattern_when_custom, factor.tag.label)
         Factor.ShortSleep -> stringResource(R.string.pattern_when_short_sleep)
+        Factor.FewSteps -> stringResource(R.string.pattern_when_few_steps)
     }
     return stringResource(R.string.pattern_sentence, condition, stringResource(group.labelRes), stringResource(magnitude.labelRes))
 }
