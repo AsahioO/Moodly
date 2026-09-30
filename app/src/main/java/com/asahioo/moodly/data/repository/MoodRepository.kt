@@ -4,28 +4,43 @@ import com.asahioo.moodly.data.local.MoodLocalDataSource
 import com.asahioo.moodly.data.model.AppData
 import com.asahioo.moodly.data.model.CustomTag
 import com.asahioo.moodly.data.model.DayContext
+import com.asahioo.moodly.data.model.DayPart
 import com.asahioo.moodly.data.model.HealthDay
 import com.asahioo.moodly.data.model.Mood
 import com.asahioo.moodly.data.model.PresetTag
 import com.asahioo.moodly.data.model.QuizProgress
 import com.asahioo.moodly.data.model.Settings
 import com.asahioo.moodly.data.model.StressLevel
+import com.asahioo.moodly.domain.Backup
 import com.asahioo.moodly.domain.StressQuiz
 import com.asahioo.moodly.domain.normalizeTagLabel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
+import kotlinx.serialization.json.Json
 import java.time.LocalDate
+import java.time.LocalTime
 import java.util.UUID
 
 /** Única fuente de verdad para la UI. Los ViewModels solo hablan con esta interfaz. */
 interface MoodRepository {
     val data: Flow<AppData>
 
-    /** Con [mood] null borra el registro del día (ánimo, nota y etiquetas; conserva sueño y pasos). */
+    /**
+     * Con [mood] registra el ánimo en el momento actual del día (mañana/tarde/noche).
+     * Con null borra el registro del día (ánimos, nota y etiquetas; conserva sueño y pasos).
+     */
     suspend fun setMood(date: LocalDate, mood: Mood?)
 
-    /** Guarda ánimo, nota y etiquetas del día en una sola escritura. */
-    suspend fun saveDay(date: LocalDate, mood: Mood, note: String, tags: Set<PresetTag>, customTags: Set<String>)
+    /** Guarda el ánimo de [part], más nota y etiquetas del día, en una sola escritura. */
+    suspend fun saveDay(
+        date: LocalDate,
+        mood: Mood,
+        part: DayPart,
+        note: String,
+        tags: Set<PresetTag>,
+        customTags: Set<String>,
+    )
     suspend fun setSleep(date: LocalDate, minutes: Int)
 
     /** Importa lo leído de Health Connect en una sola escritura. No pisa el sueño manual. */
@@ -49,24 +64,31 @@ interface MoodRepository {
 
     /** Borra todo: registros, nombre y ajustes. La app vuelve al onboarding. */
     suspend fun resetAll()
+
+    /** Todo el estado como texto JSON, listo para guardarlo en un archivo. */
+    suspend fun exportBackup(): String
+
+    /** Reemplaza todo el estado por el del respaldo. false (y no toca nada) si el texto no es válido. */
+    suspend fun importBackup(text: String): Boolean
 }
 
-class DefaultMoodRepository(private val local: MoodLocalDataSource) : MoodRepository {
+class DefaultMoodRepository(private val local: MoodLocalDataSource, private val json: Json) : MoodRepository {
 
     override val data: Flow<AppData> = local.data.distinctUntilChanged()
 
     override suspend fun setMood(date: LocalDate, mood: Mood?) {
         val key = date.toString()
         local.update { d ->
-            if (mood != null) return@update d.copy(moods = d.moods + (key to mood))
+            if (mood != null) return@update d.withMood(key, DayPart.of(LocalTime.now()), mood)
             val kept = (d.days[key] ?: DayContext()).copy(note = "", tags = emptySet(), customTags = emptySet())
-            d.copy(moods = d.moods - key, days = d.days.with(key, kept))
+            d.copy(moods = d.moods - key, parts = d.parts - key, days = d.days.with(key, kept))
         }
     }
 
     override suspend fun saveDay(
         date: LocalDate,
         mood: Mood,
+        part: DayPart,
         note: String,
         tags: Set<PresetTag>,
         customTags: Set<String>,
@@ -79,7 +101,7 @@ class DefaultMoodRepository(private val local: MoodLocalDataSource) : MoodReposi
                 tags = tags,
                 customTags = customTags intersect known,
             )
-            d.copy(moods = d.moods + (key to mood), days = d.days.with(key, context))
+            d.withMood(key, part, mood).let { it.copy(days = it.days.with(key, context)) }
         }
     }
 
@@ -181,6 +203,23 @@ class DefaultMoodRepository(private val local: MoodLocalDataSource) : MoodReposi
     override suspend fun resetAll() {
         local.update { AppData() }
     }
+
+    override suspend fun exportBackup(): String = Backup.encode(json, local.data.first())
+
+    override suspend fun importBackup(text: String): Boolean {
+        val imported = Backup.decode(json, text) ?: return false
+        local.update { imported }
+        return true
+    }
+}
+
+/**
+ * Registra [mood] en [part] y deja en [AppData.moods] el ánimo de la parte más tardía.
+ * Un día viejo (sin partes) queda reemplazado por el nuevo registro: es el mismo día, con más detalle.
+ */
+internal fun AppData.withMood(key: String, part: DayPart, mood: Mood): AppData {
+    val dayParts = parts[key].orEmpty() + (part to mood)
+    return copy(parts = parts + (key to dayParts), moods = moods + (key to DayPart.latest(dayParts)!!))
 }
 
 /** Agrega o reemplaza el contexto de un día; lo quita si quedó vacío para no acumular basura. */

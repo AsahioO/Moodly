@@ -26,7 +26,7 @@ class AppContainer(context: Context) {
 
     val dateProvider: DateProvider = SystemDateProvider
 
-    val repository: MoodRepository = DefaultMoodRepository(MoodLocalDataSource(context, json))
+    val repository: MoodRepository = DefaultMoodRepository(MoodLocalDataSource(context, json), json)
 
     /** Vive lo que vive el proceso: receptores, widget y sincronización del recordatorio. */
     val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)

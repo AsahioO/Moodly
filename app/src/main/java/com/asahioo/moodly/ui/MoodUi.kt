@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import com.asahioo.moodly.R
+import com.asahioo.moodly.data.model.DayPart
 import com.asahioo.moodly.data.model.Mood
 import com.asahioo.moodly.data.model.PresetTag
 import com.asahioo.moodly.data.model.StressLevel
@@ -55,6 +56,14 @@ val Mood.messageRes: Int
         Mood.BORED -> R.string.mood_msg_bored
         Mood.CALM -> R.string.mood_msg_calm
         Mood.STRESSED -> R.string.mood_msg_stressed
+    }
+
+@get:StringRes
+val DayPart.labelRes: Int
+    get() = when (this) {
+        DayPart.MORNING -> R.string.part_morning
+        DayPart.AFTERNOON -> R.string.part_afternoon
+        DayPart.NIGHT -> R.string.part_night
     }
 
 @get:StringRes

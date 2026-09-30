@@ -4,8 +4,12 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.text.format.DateFormat
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.PredictiveBackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import com.asahioo.moodly.ui.components.saveAvatar
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
@@ -21,12 +25,15 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -38,11 +45,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.fragment.app.FragmentActivity
 import androidx.health.connect.client.PermissionController
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
@@ -58,8 +69,10 @@ import com.asahioo.moodly.ui.calendar.CalendarScreen
 import com.asahioo.moodly.ui.calendar.CalendarViewModel
 import com.asahioo.moodly.ui.components.IslandToast
 import com.asahioo.moodly.ui.components.IslandToastState
+import com.asahioo.moodly.ui.components.LaunchIntro
 import com.asahioo.moodly.ui.components.LocalHaptics
 import com.asahioo.moodly.ui.components.LocalToast
+import com.asahioo.moodly.ui.components.PrimaryButton
 import com.asahioo.moodly.ui.components.SheetHost
 import com.asahioo.moodly.ui.components.TabBar
 import com.asahioo.moodly.ui.components.ToastData
@@ -73,8 +86,10 @@ import com.asahioo.moodly.ui.home.HomeViewModel
 import com.asahioo.moodly.ui.insights.InsightsScreen
 import com.asahioo.moodly.ui.insights.InsightsViewModel
 import com.asahioo.moodly.ui.onboarding.OnboardingScreen
+import com.asahioo.moodly.ui.search.SearchScreen
 import com.asahioo.moodly.ui.settings.SettingsScreen
 import com.asahioo.moodly.ui.sheets.DaySheet
+import com.asahioo.moodly.ui.sheets.ImportSheet
 import com.asahioo.moodly.ui.sheets.MonthPickerSheet
 import com.asahioo.moodly.ui.sheets.ReminderSheet
 import com.asahioo.moodly.ui.sheets.ResetSheet
@@ -82,10 +97,14 @@ import com.asahioo.moodly.ui.sheets.SleepSheet
 import com.asahioo.moodly.ui.sheets.StressSheet
 import com.asahioo.moodly.ui.sheets.TagsSheet
 import com.asahioo.moodly.ui.theme.LocalReduceMotion
+import com.asahioo.moodly.ui.theme.MoodType
 import com.asahioo.moodly.ui.theme.Motion
 import com.asahioo.moodly.ui.theme.Palette
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.IOException
 import java.time.LocalDate
 import kotlin.coroutines.cancellation.CancellationException
 
@@ -94,7 +113,7 @@ import kotlin.coroutines.cancellation.CancellationException
  * hojas inferiores y avisos tipo isla.
  */
 @Composable
-fun MoodlyRoot(appViewModel: AppViewModel) {
+fun MoodlyRoot(appViewModel: AppViewModel, onUnlock: () -> Unit) {
     val app by appViewModel.uiState.collectAsStateWithLifecycle()
     if (!app.isReady) {
         // El splash nativo sigue visible mientras tanto.
@@ -130,15 +149,65 @@ fun MoodlyRoot(appViewModel: AppViewModel) {
         )
     }
     val is24Hour = DateFormat.is24HourFormat(LocalContext.current)
+    var sheet by remember { mutableStateOf<SheetRequest?>(null) }
+
+    val exportBackup = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument("application/json"),
+    ) { uri ->
+        if (uri == null) return@rememberLauncherForActivityResult
+        scope.launch {
+            val saved = try {
+                val text = appViewModel.exportBackup()
+                withContext(Dispatchers.IO) {
+                    context.contentResolver.openOutputStream(uri, "wt")?.use { it.write(text.toByteArray()) } != null
+                }
+            } catch (e: IOException) {
+                false
+            }
+            toast.show(
+                if (saved) ToastData(ToastIcon.Check, UiText.res(R.string.toast_backup_saved), UiText.res(R.string.toast_backup_saved_sub))
+                else ToastData(ToastIcon.Check, UiText.res(R.string.toast_backup_failed), UiText.res(R.string.toast_backup_failed_sub))
+            )
+        }
+    }
+    val pickBackup = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        if (uri == null) return@rememberLauncherForActivityResult
+        scope.launch {
+            val text = try {
+                withContext(Dispatchers.IO) {
+                    // ponytail: sin tope de tamaño; un respaldo real pesa KB. Agregar límite si se abre basura enorme.
+                    context.contentResolver.openInputStream(uri)?.use { it.readBytes().decodeToString() }
+                }
+            } catch (e: IOException) {
+                null
+            }
+            if (text == null) {
+                toast.show(ToastData(ToastIcon.Check, UiText.res(R.string.toast_import_invalid), UiText.res(R.string.toast_import_invalid_sub)))
+            } else {
+                sheet = SheetRequest.Import(text)
+            }
+        }
+    }
+
+    val pickAvatar = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        if (uri == null) return@rememberLauncherForActivityResult
+        scope.launch {
+            val name = saveAvatar(context, uri, app.settings.avatarFile)
+            if (name != null) appViewModel.setAvatar(name)
+            else toast.show(ToastData(ToastIcon.Check, UiText.res(R.string.toast_avatar_failed), UiText.res(R.string.toast_avatar_failed_sub)))
+        }
+    }
 
     var tab by rememberSaveable { mutableStateOf(Tab.Home) }
-    var sheet by remember { mutableStateOf<SheetRequest?>(null) }
+    var showSearch by rememberSaveable { mutableStateOf(false) }
     val sheetOffset = remember { Animatable(1f) }
     var entranceKey by rememberSaveable { mutableIntStateOf(0) }
     val homeStagger = rememberStagger(entranceKey)
     val homeScroll = rememberScrollState()
     // El quiz reemplaza a los pasos en Inicio solo cuando se pide desde el indicador de estrés.
     var quizRequested by rememberSaveable { mutableStateOf(false) }
+    // Intro del logo solo en arranque en frío (no al rotar ni al volver del fondo).
+    var showIntro by rememberSaveable { mutableStateOf(true) }
 
     val showOnboarding = !app.onboarded
 
@@ -254,11 +323,12 @@ fun MoodlyRoot(appViewModel: AppViewModel) {
                 MainTabs(
                     tab = tab,
                     onTabChange = ::openTab,
-                    backEnabled = sheet == null && !showOnboarding,
+                    backEnabled = sheet == null && !showOnboarding && !showSearch,
                 ) { current ->
                     when (current) {
                         Tab.Home -> HomeScreen(
                             state = home,
+                            avatarFile = app.settings.avatarFile,
                             stagger = homeStagger,
                             onOpenSettings = { openTab(Tab.Settings) },
                             onPickMood = ::pickTodayMood,
@@ -282,6 +352,7 @@ fun MoodlyRoot(appViewModel: AppViewModel) {
                             state = calendar,
                             onBack = { openTab(Tab.Home) },
                             onPickMonth = { sheet = SheetRequest.MonthPicker },
+                            onSearch = { showSearch = true },
                             onDayClick = { cell ->
                                 if (cell.isFuture) {
                                     haptics.reject()
@@ -299,6 +370,9 @@ fun MoodlyRoot(appViewModel: AppViewModel) {
                             onStep = calendarVm::step,
                         )
                         Tab.Settings -> SettingsScreen(
+                            onPickAvatar = {
+                                pickAvatar.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                            },
                             userName = app.userName,
                             trackingSince = app.trackingSince,
                             settings = app.settings,
@@ -362,10 +436,47 @@ fun MoodlyRoot(appViewModel: AppViewModel) {
                             customTagCount = app.customTags.size,
                             onManageTags = { sheet = SheetRequest.Tags },
                             onReplayIntro = appViewModel::replayOnboarding,
+                            onAppLockChange = { enabled ->
+                                val activity = context as? FragmentActivity
+                                when {
+                                    !enabled -> appViewModel.setAppLock(false)
+                                    activity == null || !AppLock.isAvailable(activity) -> toast.show(
+                                        ToastData(
+                                            ToastIcon.Check,
+                                            UiText.res(R.string.toast_lock_unavailable),
+                                            UiText.res(R.string.toast_lock_unavailable_sub),
+                                        )
+                                    )
+                                    // Confirma con la credencial antes de activarlo: así se sabe que funciona y no deja al usuario fuera.
+                                    else -> AppLock.authenticate(activity) { ok ->
+                                        if (ok) {
+                                            appViewModel.unlock()
+                                            appViewModel.setAppLock(true)
+                                        }
+                                    }
+                                }
+                            },
+                            onExportBackup ={ exportBackup.launch("moodly-${home.today}.json") },
+                            onImportBackup = { pickBackup.launch(arrayOf("*/*")) },
                             onResetData = { sheet = SheetRequest.Reset },
                         )
                     }
                 }
+            }
+
+            BackHandler(enabled = showSearch && sheet == null) { showSearch = false }
+            AnimatedVisibility(
+                visible = showSearch && !showOnboarding,
+                enter = fadeIn(tween(260)) + slideInHorizontally(tween(320, easing = Motion.EaseOut)) { it / 4 },
+                exit = fadeOut(tween(200)),
+            ) {
+                SearchScreen(
+                    moods = app.moods,
+                    days = app.days,
+                    customTags = app.customTags,
+                    onBack = { showSearch = false },
+                    onOpenDay = { date -> sheet = SheetRequest.Day(date) },
+                )
             }
 
             AnimatedVisibility(
@@ -394,10 +505,11 @@ fun MoodlyRoot(appViewModel: AppViewModel) {
                             date = request.date,
                             isToday = request.date == home.today,
                             current = app.moods[key],
+                            parts = app.parts[key].orEmpty(),
                             context = app.days[key],
                             customTags = app.customTags,
-                            onSave = { mood, note, tags, customTags ->
-                                calendarVm.saveDay(request.date, mood, note, tags, customTags)
+                            onSave = { mood, part, note, tags, customTags ->
+                                calendarVm.saveDay(request.date, mood, part, note, tags, customTags)
                                 sheet = null
                                 toast.show(
                                     ToastData(
@@ -485,11 +597,50 @@ fun MoodlyRoot(appViewModel: AppViewModel) {
                         },
                         onCancel = { sheet = null },
                     )
+                    is SheetRequest.Import -> ImportSheet(
+                        onConfirm = {
+                            sheet = null
+                            scope.launch {
+                                val ok = appViewModel.importBackup(request.text)
+                                if (ok) haptics.confirm()
+                                toast.show(
+                                    if (ok) ToastData(ToastIcon.Check, UiText.res(R.string.toast_import_done), UiText.res(R.string.toast_import_done_sub))
+                                    else ToastData(ToastIcon.Check, UiText.res(R.string.toast_import_invalid), UiText.res(R.string.toast_import_invalid_sub))
+                                )
+                            }
+                        },
+                        onCancel = { sheet = null },
+                    )
                 }
             }
 
             IslandToast(toast)
+
+            if (showIntro) LaunchIntro { showIntro = false }
+
+            if (app.locked) LockCover(onUnlock)
         }
+    }
+}
+
+/** Tapa opaca mientras la app está bloqueada; absorbe los toques para que nada de abajo responda. */
+@Composable
+private fun LockCover(onUnlock: () -> Unit) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .background(Palette.Paper)
+            .pointerInput(Unit) {}
+            .padding(24.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(stringResource(R.string.lock_title), style = MoodType.Title)
+        PrimaryButton(
+            text = stringResource(R.string.lock_unlock),
+            onClick = onUnlock,
+            modifier = Modifier.padding(top = 24.dp),
+        )
     }
 }
 

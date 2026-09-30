@@ -80,6 +80,7 @@ fun CalendarScreen(
     state: CalendarUiState,
     onBack: () -> Unit,
     onPickMonth: () -> Unit,
+    onSearch: () -> Unit,
     onDayClick: (DayCell) -> Unit,
     onStep: (Int) -> Boolean,
 ) {
@@ -119,7 +120,21 @@ fun CalendarScreen(
                         )
                     },
                 )
-                WeekdayRow(Modifier.padding(top = 22.dp, bottom = 8.dp))
+                Row(
+                    Modifier
+                        .padding(top = 16.dp)
+                        .fillMaxWidth()
+                        .bounceClick(onClick = onSearch, pressedScale = 0.98f)
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(Palette.Mist)
+                        .padding(horizontal = 14.dp, vertical = 11.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                ) {
+                    Glyph(AppIcons.Search, Modifier.size(18.dp))
+                    Text(stringResource(R.string.search_open), style = MoodType.Body.copy(color = Palette.Grey2))
+                }
+                WeekdayRow(Modifier.padding(top = 16.dp, bottom = 8.dp))
                 SwipeableMonth(state, pop, onDayClick, onStep)
                 SummaryCard(state.summary, pop)
                 StatsRow(state.summary, pop)

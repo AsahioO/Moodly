@@ -10,6 +10,8 @@ serializationJson = "1.9.0"
 splashscreen = "1.0.1"
 junit = "4.13.2"
 healthConnect = "1.1.0"
+biometric = "1.1.0"
+fragment = "1.8.5"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -28,6 +30,8 @@ androidx-compose-material3 = { group = "androidx.compose.material3", name = "mat
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serializationJson" }
 androidx-health-connect = { group = "androidx.health.connect", name = "connect-client", version.ref = "healthConnect" }
+androidx-biometric = { group = "androidx.biometric", name = "biometric", version.ref = "biometric" }
+androidx-fragment = { group = "androidx.fragment", name = "fragment", version.ref = "fragment" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 
 [plugins]

@@ -13,6 +13,10 @@ App nativa de Android para llevar el registro diario del ánimo, hecha con **Kot
 - **Health Connect** (opcional): importa sueño y pasos, solo lectura.
 - **Recordatorio diario**, con caras en la notificación para registrar sin abrir la app.
 - **Widget** de pantalla de inicio redimensionable.
+- **Mañana, tarde y noche**: puedes registrar un ánimo por momento del día; el calendario, la racha y el widget muestran el más tardío.
+- **Búsqueda** en el historial por texto (notas y etiquetas propias), ánimo y etiquetas, desde el Calendario.
+- **Respaldo**: exporta e importa todos tus datos como un archivo JSON (Ajustes → App).
+- **Bloqueo** opcional con huella, rostro, PIN o patrón del teléfono. Antes de Android 11 solo funciona con biometría inscrita. El widget sigue mostrando el ánimo de hoy y la racha aunque la app esté bloqueada.
 
 ## Cómo correrlo
 

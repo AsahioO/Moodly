@@ -109,6 +109,7 @@ import com.asahioo.moodly.ui.sundayIndex
 @Composable
 fun HomeScreen(
     state: HomeUiState,
+    avatarFile: String?,
     stagger: Stagger?,
     onOpenSettings: () -> Unit,
     onPickMood: (Mood) -> Unit,
@@ -147,7 +148,7 @@ fun HomeScreen(
                     .statusBarsPadding()
                     .padding(top = 8.dp, bottom = 18.dp),
             ) {
-                HomeHeader(state.userName, onOpenSettings, Modifier.staggered(stagger, 0))
+                HomeHeader(state.userName, avatarFile, onOpenSettings, Modifier.staggered(stagger, 0))
                 Text(
                     shortDate(state.today),
                     style = MoodType.Base.copy(color = Palette.Grey, fontSize = MoodType.Chip.fontSize),
@@ -212,7 +213,7 @@ fun HomeScreen(
 }
 
 @Composable
-private fun HomeHeader(name: String, onOpenSettings: () -> Unit, modifier: Modifier) {
+private fun HomeHeader(name: String, avatarFile: String?, onOpenSettings: () -> Unit, modifier: Modifier) {
     Row(
         modifier
             .fillMaxWidth()
@@ -226,7 +227,7 @@ private fun HomeHeader(name: String, onOpenSettings: () -> Unit, modifier: Modif
                 .bounceClick(onClick = onOpenSettings, pressedScale = 0.96f, onClickLabel = cd),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Avatar(Modifier.size(40.dp))
+            Avatar(avatarFile, Modifier.size(40.dp))
             Spacer(Modifier.width(10.dp))
             Column {
                 Text(stringResource(R.string.welcome_back), style = MoodType.Small.copy(color = Palette.Grey))

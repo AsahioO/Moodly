@@ -65,7 +65,11 @@ fun SettingsScreen(
     customTagCount: Int,
     onManageTags: () -> Unit,
     onReplayIntro: () -> Unit,
+    onAppLockChange: (Boolean) -> Unit,
+    onExportBackup: () -> Unit,
+    onImportBackup: () -> Unit,
     onResetData: () -> Unit,
+    onPickAvatar: () -> Unit,
 ) {
     val pop = rememberStagger(Unit, totalMs = 1000)
     BoxWithConstraints(
@@ -99,11 +103,12 @@ fun SettingsScreen(
                         .staggered(pop, 40, 600, 20.dp, 0.96f, Motion.Navigation)
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(22.dp))
+                        .bounceClick(onClick = onPickAvatar, pressedScale = 0.98f)
                         .background(Palette.Lime)
                         .padding(14.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Avatar(Modifier.size(60.dp))
+                    Avatar(settings.avatarFile, Modifier.size(60.dp))
                     Spacer(Modifier.width(14.dp))
                     Column {
                         if (userName.isNotBlank()) {
@@ -132,6 +137,13 @@ fun SettingsScreen(
                         subtitle = stringResource(R.string.reduce_motion_sub),
                         checked = settings.reduceMotion,
                         onChange = onReduceMotionChange,
+                    )
+                    Divider()
+                    ToggleRow(
+                        title = stringResource(R.string.app_lock),
+                        subtitle = stringResource(R.string.app_lock_sub),
+                        checked = settings.appLock,
+                        onChange = onAppLockChange,
                     )
                 }
 
@@ -187,6 +199,10 @@ fun SettingsScreen(
                     )
                     Divider()
                     ActionRow(stringResource(R.string.replay_intro), Palette.Ink, onReplayIntro)
+                    Divider()
+                    ActionRow(stringResource(R.string.backup_export), Palette.Ink, onExportBackup)
+                    Divider()
+                    ActionRow(stringResource(R.string.backup_import), Palette.Ink, onImportBackup)
                     Divider()
                     ActionRow(stringResource(R.string.reset_data), Palette.Danger, onResetData)
                 }

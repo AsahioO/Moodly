@@ -63,6 +63,7 @@ import com.asahioo.moodly.R
 import com.asahioo.moodly.data.model.AppData
 import com.asahioo.moodly.data.model.CustomTag
 import com.asahioo.moodly.data.model.DayContext
+import com.asahioo.moodly.data.model.DayPart
 import com.asahioo.moodly.data.model.Mood
 import com.asahioo.moodly.data.model.PresetTag
 import com.asahioo.moodly.data.model.StressLevel
@@ -86,6 +87,7 @@ import com.asahioo.moodly.ui.theme.Palette
 import com.asahioo.moodly.ui.tipsRes
 import com.asahioo.moodly.ui.weekdayFull
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.YearMonth
 import kotlin.math.roundToInt
 import kotlinx.coroutines.launch
@@ -110,14 +112,21 @@ fun DaySheet(
     date: LocalDate,
     isToday: Boolean,
     current: Mood?,
+    parts: Map<DayPart, Mood>,
     context: DayContext?,
     customTags: List<CustomTag>,
-    onSave: (mood: Mood, note: String, tags: Set<PresetTag>, customTags: Set<String>) -> Unit,
+    onSave: (mood: Mood, part: DayPart, note: String, tags: Set<PresetTag>, customTags: Set<String>) -> Unit,
     onClear: () -> Unit,
     onCreateTag: suspend (String) -> String?,
 ) {
     val pop = rememberStagger(date, totalMs = 900)
-    var selected by remember(date) { mutableStateOf(current) }
+    // Hoy abre en el momento actual; otro día, en el último registrado (o la noche si no hay ninguno).
+    var part by remember(date) {
+        mutableStateOf(if (isToday) DayPart.of(LocalTime.now()) else parts.keys.maxOrNull() ?: DayPart.NIGHT)
+    }
+    // Un día viejo (sin partes) muestra su único ánimo en cualquier parte hasta que se guarde una.
+    fun moodFor(p: DayPart): Mood? = parts[p] ?: current.takeIf { parts.isEmpty() }
+    var selected by remember(date) { mutableStateOf(moodFor(part)) }
     var note by remember(date) { mutableStateOf(context?.note.orEmpty()) }
     var tags by remember(date) { mutableStateOf(context?.tags.orEmpty()) }
     var custom by remember(date) { mutableStateOf(context?.customTags.orEmpty()) }
@@ -152,8 +161,17 @@ fun DaySheet(
             style = MoodType.Body.copy(color = Palette.Grey2),
             modifier = Modifier.padding(top = 8.dp),
         )
+        Row(Modifier.padding(top = 14.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            DayPart.entries.forEach { p ->
+                val label = stringResource(p.labelRes) + if (p in parts) " ✓" else ""
+                TagChip(label, selected = part == p) {
+                    part = p
+                    selected = moodFor(p)
+                }
+            }
+        }
         Column(
-            Modifier.padding(top = 18.dp),
+            Modifier.padding(top = 14.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Mood.entries.chunked(3).forEachIndexed { r, row ->
@@ -232,7 +250,7 @@ fun DaySheet(
         PrimaryButton(
             text = stringResource(R.string.save),
             enabled = selected != null,
-            onClick = { selected?.let { onSave(it, note, tags, custom) } },
+            onClick = { selected?.let { onSave(it, part, note, tags, custom) } },
             modifier = Modifier.padding(top = 18.dp),
         )
         if (current != null) {
@@ -257,7 +275,7 @@ private fun SectionLabel(text: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun TagChip(label: String, selected: Boolean, onClick: () -> Unit) {
+internal fun TagChip(label: String, selected: Boolean, onClick: () -> Unit) {
     val bg by animateColorAsState(if (selected) Palette.Ink else Palette.Mist, tween(200), label = "tagBg")
     val fg by animateColorAsState(if (selected) Palette.Paper else Palette.Ink, tween(200), label = "tagFg")
     val state = stringResource(if (selected) R.string.tag_selected else R.string.tag_not_selected)
@@ -309,7 +327,7 @@ private fun ConfirmButton(contentDescription: String, onClick: () -> Unit) {
 
 /** Campo de texto de las hojas: fondo Mist y placeholder gris, igual que el del onboarding. */
 @Composable
-private fun SheetTextField(
+internal fun SheetTextField(
     value: String,
     onValueChange: (String) -> Unit,
     hint: String,
@@ -635,6 +653,33 @@ fun ResetSheet(onConfirm: () -> Unit, onCancel: () -> Unit) {
         )
         PrimaryButton(
             text = stringResource(R.string.reset_confirm),
+            onClick = onConfirm,
+            container = Palette.DangerFill,
+            modifier = Modifier.padding(top = 18.dp),
+        )
+        PrimaryButton(
+            text = stringResource(R.string.cancel),
+            onClick = onCancel,
+            container = Palette.Mist,
+            content = Palette.Ink,
+            modifier = Modifier.padding(top = 8.dp),
+        )
+    }
+}
+
+/* ---------------------------------------- Importar respaldo ---------------------------------------- */
+
+@Composable
+fun ImportSheet(onConfirm: () -> Unit, onCancel: () -> Unit) {
+    Column {
+        SheetHeader(stringResource(R.string.settings_title), stringResource(R.string.import_title))
+        Text(
+            stringResource(R.string.import_body),
+            style = MoodType.Body.copy(color = Palette.Grey2),
+            modifier = Modifier.padding(top = 8.dp),
+        )
+        PrimaryButton(
+            text = stringResource(R.string.import_confirm),
             onClick = onConfirm,
             container = Palette.DangerFill,
             modifier = Modifier.padding(top = 18.dp),

@@ -104,6 +104,13 @@
     <string name="focus_score">Enfoque</string>
     <string name="cd_back">Atrás</string>
     <string name="cd_pick_month">Elegir mes</string>
+    <string name="search_open">Buscar en tu historial</string>
+    <string name="search_title">Buscar</string>
+    <string name="search_count">%1$d días</string>
+    <string name="search_hint">Buscar en notas y etiquetas</string>
+    <string name="search_mood">Ánimo</string>
+    <string name="search_results">Resultados</string>
+    <string name="search_empty">Ningún día coincide con tu búsqueda.</string>
     <string name="cd_day_logged">%1$d de %2$s, %3$s</string>
     <string name="cd_day_has_context">, con nota o etiquetas</string>
     <string name="cd_day_empty">%1$d de %2$s, sin registro</string>
@@ -141,6 +148,15 @@
     <string name="app_section">App</string>
     <string name="replay_intro">Repetir introducción</string>
     <string name="reset_data">Borrar todos los datos</string>
+    <string name="app_lock">Bloqueo de la app</string>
+    <string name="app_lock_sub">Pide tu huella, rostro o PIN al abrir</string>
+    <string name="lock_title">Moodly está bloqueado</string>
+    <string name="lock_unlock">Desbloquear</string>
+    <string name="biometric_title">Desbloquear Moodly</string>
+    <string name="toast_lock_unavailable">Configura un bloqueo en el teléfono</string>
+    <string name="toast_lock_unavailable_sub">Huella, rostro, PIN o patrón</string>
+    <string name="backup_export">Exportar respaldo</string>
+    <string name="backup_import">Importar respaldo</string>
     <string name="reminder_section">Recordatorio</string>
     <string name="reminder_daily">Recordatorio diario</string>
     <string name="reminder_daily_sub">Registra tu ánimo desde la notificación</string>
@@ -164,6 +180,9 @@
 
     <!-- Hojas -->
     <string name="day_sheet_question">¿Cómo te sentiste este día?</string>
+    <string name="part_morning">Mañana</string>
+    <string name="part_afternoon">Tarde</string>
+    <string name="part_night">Noche</string>
     <string name="today">Hoy</string>
     <string name="weekday_today">%1$s · Hoy</string>
     <string name="day_month">%1$d de %2$s</string>
@@ -184,6 +203,19 @@
     <string name="reset_title">¿Borrar todos los datos?</string>
     <string name="reset_body">Esto borra tus registros de ánimo, notas, etiquetas, tu sueño, el quiz, tu nombre y tus ajustes. No se puede deshacer.</string>
     <string name="reset_confirm">Borrar todo</string>
+    <string name="import_title">¿Importar este respaldo?</string>
+    <string name="import_body">Reemplaza todos los datos actuales (registros, notas, etiquetas, nombre y ajustes) por los del archivo. No se puede deshacer.</string>
+    <string name="import_confirm">Reemplazar mis datos</string>
+    <string name="toast_backup_saved">Respaldo guardado</string>
+    <string name="toast_backup_saved_sub">Guárdalo en un lugar seguro</string>
+    <string name="toast_backup_failed">No se pudo guardar</string>
+    <string name="toast_backup_failed_sub">Prueba con otra ubicación</string>
+    <string name="toast_avatar_failed">No se pudo usar la foto</string>
+    <string name="toast_avatar_failed_sub">Prueba con otra imagen</string>
+    <string name="toast_import_done">Respaldo importado</string>
+    <string name="toast_import_done_sub">Tus datos están de vuelta</string>
+    <string name="toast_import_invalid">Archivo no válido</string>
+    <string name="toast_import_invalid_sub">No es un respaldo de Moodly</string>
     <string name="stress_no_data">Sin datos todavía</string>
     <string name="stress_no_data_text">Responde el quiz de %1$d preguntas para conocer tu nivel de estrés.</string>
     <string name="quiz_start">Empezar el quiz</string>

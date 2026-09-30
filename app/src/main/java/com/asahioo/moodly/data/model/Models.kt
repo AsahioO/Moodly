@@ -1,6 +1,7 @@
 package com.asahioo.moodly.data.model
 
 import kotlinx.serialization.Serializable
+import java.time.LocalTime
 
 /** Ánimos disponibles. El orden define el orden de los chips y de la leyenda. */
 @Serializable
@@ -8,6 +9,23 @@ enum class Mood { HAPPY, ANGRY, SLEEPY, BORED, CALM, STRESSED }
 
 @Serializable
 enum class StressLevel { LOW, MEDIUM, HIGH }
+
+/** Momento del día de un registro. Se serializa por nombre y el orden es cronológico: solo agregar con cuidado. */
+@Serializable
+enum class DayPart {
+    MORNING, AFTERNOON, NIGHT;
+
+    companion object {
+        fun of(time: LocalTime): DayPart = when {
+            time.hour < 12 -> MORNING
+            time.hour < 19 -> AFTERNOON
+            else -> NIGHT
+        }
+
+        /** El ánimo "representativo" del día (calendario, racha, widget): el de la parte más tardía. */
+        fun latest(parts: Map<DayPart, Mood>): Mood? = parts.maxByOrNull { it.key.ordinal }?.value
+    }
+}
 
 /** Etiquetas predefinidas. Se serializan por nombre: nunca renombrar, solo agregar al final. */
 @Serializable
@@ -55,6 +73,10 @@ data class Settings(
     val reminderEnabled: Boolean = false,
     /** Minutos desde medianoche (21:00 por defecto). */
     val reminderMinutes: Int = DEFAULT_REMINDER_MINUTES,
+    /** Pide la credencial del dispositivo al abrir la app. */
+    val appLock: Boolean = false,
+    /** Nombre del JPEG de la foto de perfil en filesDir; null = ilustración por defecto. */
+    val avatarFile: String? = null,
 ) {
     companion object {
         const val DEFAULT_REMINDER_MINUTES = 21 * 60
@@ -78,6 +100,11 @@ data class AppData(
     val onboarded: Boolean = false,
     /** Clave: fecha ISO-8601 (yyyy-MM-dd). */
     val moods: Map<String, Mood> = emptyMap(),
+    /**
+     * Ánimo por momento del día. [moods] guarda el de la parte más tardía, así que todo lo que solo
+     * necesita "el ánimo del día" sigue leyendo [moods]. Los días viejos no tienen entrada aquí.
+     */
+    val parts: Map<String, Map<DayPart, Mood>> = emptyMap(),
     /** Nota, etiquetas y sueño por día. Misma clave que [moods]. */
     val days: Map<String, DayContext> = emptyMap(),
     /** En orden de creación (= orden de los chips). */

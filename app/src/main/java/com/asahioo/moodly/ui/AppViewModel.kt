@@ -6,11 +6,14 @@ import com.asahioo.moodly.data.health.HealthConnect
 import com.asahioo.moodly.data.health.HealthStatus
 import com.asahioo.moodly.data.model.CustomTag
 import com.asahioo.moodly.data.model.DayContext
+import com.asahioo.moodly.data.model.DayPart
 import com.asahioo.moodly.data.model.Mood
 import com.asahioo.moodly.data.model.Settings
 import com.asahioo.moodly.data.repository.MoodRepository
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -24,8 +27,11 @@ data class AppUiState(
     val trackingSince: LocalDate? = null,
     /** Registros completos: la hoja del día puede abrirse para cualquier fecha (Inicio o Calendario). */
     val moods: Map<String, Mood> = emptyMap(),
+    val parts: Map<String, Map<DayPart, Mood>> = emptyMap(),
     val days: Map<String, DayContext> = emptyMap(),
     val customTags: List<CustomTag> = emptyList(),
+    /** Bloqueo activo y sin desbloquear: la UI debe tapar todo. */
+    val locked: Boolean = false,
 )
 
 /**
@@ -37,8 +43,15 @@ class AppViewModel(
     private val health: HealthConnect,
 ) : ViewModel() {
 
-    val uiState: StateFlow<AppUiState> = repository.data
-        .map { d ->
+    /** Se pierde con el proceso (arranque en frío = bloqueado) y al volver de segundo plano tras la gracia. */
+    private val unlocked = MutableStateFlow(false)
+
+    fun unlock() { unlocked.value = true }
+    fun lock() { unlocked.value = false }
+    fun setAvatar(file: String?) = launchSet { repository.updateSettings { it.copy(avatarFile = file) } }
+    fun setAppLock(enabled: Boolean) = launchSet { repository.updateSettings { it.copy(appLock = enabled) } }
+
+    val uiState: StateFlow<AppUiState> = combine(repository.data, unlocked) { d, isUnlocked ->
             AppUiState(
                 isReady = true,
                 onboarded = d.onboarded,
@@ -47,8 +60,10 @@ class AppViewModel(
                 // Las fechas ISO-8601 ordenan igual como texto que como fecha.
                 trackingSince = d.moods.keys.minOrNull()?.let(LocalDate::parse),
                 moods = d.moods,
+                parts = d.parts,
                 days = d.days,
                 customTags = d.customTags,
+                locked = d.settings.appLock && !isUnlocked,
             )
         }
         .stateIn(viewModelScope, SharingStarted.Eagerly, AppUiState())
@@ -73,6 +88,9 @@ class AppViewModel(
         health.disconnect()
         repository.resetAll()
     }
+
+    suspend fun exportBackup(): String = repository.exportBackup()
+    suspend fun importBackup(text: String): Boolean = repository.importBackup(text)
 
     val healthStatus: StateFlow<HealthStatus> = health.status
 

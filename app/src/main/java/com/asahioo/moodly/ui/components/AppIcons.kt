@@ -56,7 +56,8 @@ object AppIcons {
         GFill("M17 7c1.9 0 3 1.8 3 4.3 0 2.2-1.8 3.7-1.8 5.2h-3.4c0-1.5-.8-3-.8-5.2 0-2.5 1.1-4.3 3-4.3z"),
         GRoundRect(14.8f, 17.6f, 3.4f, 3.2f, 1.6f),
     )
-    val Puzzle = GlyphSpec(24f, GFill("M4 7h4.2a2.8 2.8 0 1 1 5.6 0H18v4.2a2.8 2.8 0 1 1 0 5.6V21H4z"))
+    val Search = GlyphSpec(24f, GStroke("M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM16.5 16.5L20.5 20.5", SW))
+    val Puzzle =GlyphSpec(24f, GFill("M4 7h4.2a2.8 2.8 0 1 1 5.6 0H18v4.2a2.8 2.8 0 1 1 0 5.6V21H4z"))
 
     // Íconos a color para los avisos (viewBox 40x40).
     val ToastCheck = GlyphSpec(

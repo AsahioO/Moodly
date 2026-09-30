@@ -16,7 +16,6 @@ import java.time.ZoneId
 internal const val REMINDER_NOTIFICATION_ID = 1
 private const val CHANNEL_ID = "daily_reminder"
 private const val REQUEST_REMINDER = 100
-private const val WINDOW_MS = 10 * 60 * 1000L
 
 /** Programa la alarma diaria del recordatorio. Cada disparo programa el siguiente. */
 class ReminderScheduler(context: Context) {
@@ -26,11 +25,9 @@ class ReminderScheduler(context: Context) {
 
     fun schedule(minutesOfDay: Int) {
         val at = nextTrigger(LocalDateTime.now(), minutesOfDay).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
-        // setAndAllowWhileIdle deja al sistema una ventana de hasta 1 h; setWindow la acota a 10 min
-        // (el mínimo) sin pedir el permiso de alarmas exactas.
-        // ponytail: en Doze profundo puede diferirse a la siguiente ventana de mantenimiento;
-        // setExactAndAllowWhileIdle + SCHEDULE_EXACT_ALARM si hace falta puntualidad al minuto.
-        alarms.setWindow(AlarmManager.RTC_WAKEUP, at, WINDOW_MS, pendingIntent())
+        // setWindow no se ejecuta en Doze; AllowWhileIdle sí (puede llegar unos minutos tarde).
+        // ponytail: setExactAndAllowWhileIdle + SCHEDULE_EXACT_ALARM si hace falta puntualidad al minuto.
+        alarms.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, at, pendingIntent())
     }
 
     fun cancel() = alarms.cancel(pendingIntent())

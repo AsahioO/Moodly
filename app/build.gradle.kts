@@ -73,6 +73,8 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.health.connect)
+    implementation(libs.androidx.biometric)
+    implementation(libs.androidx.fragment)
 
     testImplementation(libs.junit)
 }

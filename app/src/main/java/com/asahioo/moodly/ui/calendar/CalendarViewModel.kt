@@ -3,6 +3,7 @@ package com.asahioo.moodly.ui.calendar
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.asahioo.moodly.data.model.DayContext
+import com.asahioo.moodly.data.model.DayPart
 import com.asahioo.moodly.data.model.Mood
 import com.asahioo.moodly.data.model.PresetTag
 import com.asahioo.moodly.data.repository.MoodRepository
@@ -92,9 +93,9 @@ class CalendarViewModel(
         viewModelScope.launch { repository.setMood(date, mood) }
     }
 
-    fun saveDay(date: LocalDate, mood: Mood, note: String, tags: Set<PresetTag>, customTags: Set<String>) {
+    fun saveDay(date: LocalDate, mood: Mood, part: DayPart, note: String, tags: Set<PresetTag>, customTags: Set<String>) {
         if (date.isAfter(dates.today())) return
-        viewModelScope.launch { repository.saveDay(date, mood, note, tags, customTags) }
+        viewModelScope.launch { repository.saveDay(date, mood, part, note, tags, customTags) }
     }
 
     private fun build(moods: Map<String, Mood>, contexts: Map<String, DayContext>, month: YearMonth): CalendarUiState {
