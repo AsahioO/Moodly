@@ -137,6 +137,8 @@ fun MoodlyRoot(appViewModel: AppViewModel) {
     var entranceKey by rememberSaveable { mutableIntStateOf(0) }
     val homeStagger = rememberStagger(entranceKey)
     val homeScroll = rememberScrollState()
+    // El quiz reemplaza a los pasos en Inicio solo cuando se pide desde el indicador de estrés.
+    var quizRequested by rememberSaveable { mutableStateOf(false) }
 
     val showOnboarding = !app.onboarded
 
@@ -160,13 +162,16 @@ fun MoodlyRoot(appViewModel: AppViewModel) {
     LaunchedEffect(homeVm) {
         homeVm.events.collect { event ->
             when (event) {
-                is HomeEvent.QuizCompleted -> toast.show(
-                    ToastData(
-                        ToastIcon.Check,
-                        UiText.res(R.string.toast_quiz_done),
-                        UiText.res(R.string.toast_stress_level, UiText.res(event.level.labelRes)),
+                is HomeEvent.QuizCompleted -> {
+                    quizRequested = false
+                    toast.show(
+                        ToastData(
+                            ToastIcon.Check,
+                            UiText.res(R.string.toast_quiz_done),
+                            UiText.res(R.string.toast_stress_level, UiText.res(event.level.labelRes)),
+                        )
                     )
-                )
+                }
             }
         }
     }
@@ -262,12 +267,15 @@ fun MoodlyRoot(appViewModel: AppViewModel) {
                             onOpenSleep = { sheet = SheetRequest.Sleep },
                             onOpenStress = { sheet = SheetRequest.Stress },
                             onOpenContext = { sheet = SheetRequest.Day(home.today) },
+                            showSteps = !quizRequested && (healthStatus as? HealthStatus.Connected)?.steps == true,
                             scrollState = homeScroll,
                         )
                         Tab.Insights -> InsightsScreen(
                             state = insights,
                             onBack = { openTab(Tab.Home) },
                             onOpenSleep = { sheet = SheetRequest.Sleep },
+                            showSteps = (healthStatus as? HealthStatus.Connected)?.steps == true,
+                            onOpenSettings = { openTab(Tab.Settings) },
                             onOpenStress = { sheet = SheetRequest.Stress },
                         )
                         Tab.Calendar -> CalendarScreen(
@@ -429,6 +437,7 @@ fun MoodlyRoot(appViewModel: AppViewModel) {
                         quizTotal = home.quizTotal,
                         onQuiz = {
                             if (home.quizDone) homeVm.restartQuiz()
+                            quizRequested = true
                             sheet = null
                             scope.launch {
                                 if (tab != Tab.Home) {

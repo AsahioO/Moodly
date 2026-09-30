@@ -23,6 +23,7 @@ data class InsightsUiState(
     val summary: MonthSummary,
     val lastWeek: List<DayCell>,
     val sleepMinutes: Int?,
+    val steps: Int? = null,
     val stress: StressLevel?,
     val patterns: PatternsResult = PatternsResult.Empty,
 )
@@ -42,6 +43,7 @@ class InsightsViewModel(
                     DayCell(date, d.moods[date.toString()], isFuture = false, isToday = back == 0)
                 },
                 sleepMinutes = d.days[today.toString()]?.sleepMinutes,
+                steps = d.days[today.toString()]?.steps,
                 stress = d.stress,
                 patterns = MoodPatterns.find(d, today),
             )

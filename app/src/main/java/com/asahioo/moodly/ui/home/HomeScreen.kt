@@ -100,6 +100,11 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlinx.coroutines.launch
+import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.unit.sp
+import java.text.NumberFormat
+import androidx.compose.ui.text.font.FontWeight
+import com.asahioo.moodly.ui.sundayIndex
 
 @Composable
 fun HomeScreen(
@@ -112,6 +117,8 @@ fun HomeScreen(
     onOpenSleep: () -> Unit,
     onOpenStress: () -> Unit,
     onOpenContext: () -> Unit,
+    /** Pasos en lugar del quiz: permiso de pasos concedido y el quiz no fue pedido desde estrés. */
+    showSteps: Boolean,
     scrollState: ScrollState = rememberScrollState(),
 ) {
     val density = LocalDensity.current
@@ -185,14 +192,20 @@ fun HomeScreen(
                             .staggered(stagger, 270, 800, 60.dp, 0.94f, Motion.Navigation),
                     )
                 }
-                QuizCard(
-                    state = state,
-                    onAnswer = onAnswer,
-                    onRestart = onRestartQuiz,
-                    modifier = Modifier
-                        .onSizeChanged { quizHeight = with(density) { it.height.toDp() } }
-                        .staggered(stagger, 360, 800, 60.dp, 0.94f, Motion.Navigation),
-                )
+                val bottomModifier = Modifier
+                    .onSizeChanged { quizHeight = with(density) { it.height.toDp() } }
+                    .staggered(stagger, 360, 800, 60.dp, 0.94f, Motion.Navigation)
+                // Con pasos de Health Connect, el quiz vive detrás del indicador de estrés.
+                if (showSteps) {
+                    StepsCard(state.steps, state.week, bottomModifier)
+                } else {
+                    QuizCard(
+                        state = state,
+                        onAnswer = onAnswer,
+                        onRestart = onRestartQuiz,
+                        modifier = bottomModifier,
+                    )
+                }
             }
         }
     }
@@ -400,6 +413,112 @@ private fun SleepCard(minutes: Int?, onClick: () -> Unit, modifier: Modifier) {
                 Spacer(Modifier.width(6.dp))
                 AnimatedNumber(minutes % 60, MoodType.Big, Modifier.alignByBaseline(), durationMs = 1100)
                 Text(stringResource(R.string.unit_min), style = MoodType.BigUnit, modifier = Modifier.alignByBaseline())
+            }
+        }
+    }
+}
+
+@Composable
+private fun StepsCard(steps: Int?, week: List<StepDay>, modifier: Modifier) {
+    val fmt = remember { NumberFormat.getIntegerInstance() }
+    val days = stringArrayResource(R.array.weekdays_short)
+    // Sin meta: la referencia es el mejor día propio de la semana.
+    val best = week.filter { it.steps != null }.takeIf { it.size >= 2 }?.maxBy { it.steps!! }
+    val cd = buildString {
+        append(stringResource(R.string.steps_today)).append(": ")
+        append(steps?.let(fmt::format) ?: stringResource(R.string.steps_no_data))
+        if (best != null) append(". ").append(stringResource(R.string.cd_steps_best, fmt.format(best.steps)))
+    }
+    Column(
+        modifier
+            .fillMaxWidth()
+            .clip(CardShape)
+            .background(Palette.Lime)
+            .clearAndSetSemantics { contentDescription = cd }
+            .padding(14.dp),
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            CardHeader(AppIcons.Steps, stringResource(R.string.steps_today), Modifier.weight(1f))
+            if (best != null) {
+                Text(
+                    stringResource(R.string.steps_best, fmt.format(best.steps), days[best.date.sundayIndex()]),
+                    style = MoodType.Label.copy(color = Palette.LimeInk),
+                )
+            }
+        }
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 14.dp),
+            verticalAlignment = Alignment.Bottom,
+        ) {
+            Box(Modifier.weight(1f)) {
+                if (steps == null) {
+                    EmptyValue(stringResource(R.string.steps_no_data), MoodType.Big)
+                } else {
+                    Row {
+                        AnimatedNumber(steps, MoodType.Big, Modifier.alignByBaseline(), format = fmt::format)
+                        Spacer(Modifier.width(5.dp))
+                        Text(stringResource(R.string.unit_steps), style = MoodType.BigUnit, modifier = Modifier.alignByBaseline())
+                    }
+                }
+            }
+            WeekSteps(week, days, Modifier.width(150.dp))
+        }
+    }
+}
+
+/** Últimos 7 días a escala del mejor día; cada barra lleva el color del ánimo de ese día. */
+@Composable
+private fun WeekSteps(week: List<StepDay>, days: Array<String>, modifier: Modifier) {
+    val reduce = LocalReduceMotion.current
+    val grow = remember(week) { Animatable(if (reduce) 1f else 0f) }
+    LaunchedEffect(grow) { grow.animateTo(1f, tween(1100, delayMillis = 240)) }
+    Column(modifier) {
+        Canvas(
+            Modifier
+                .fillMaxWidth()
+                .height(64.dp),
+        ) {
+            val n = week.size
+            val gap = 7.dp.toPx()
+            val w = (size.width - gap * (n - 1)) / n
+            val radius = CornerRadius(w / 2)
+            val top = (week.maxOfOrNull { it.steps ?: 0 } ?: 0).coerceAtLeast(1).toFloat()
+            val t = grow.value * 1100f
+            week.forEachIndexed { i, day ->
+                val p = Motion.Back.transform(((t - i * 50f) / 700f).coerceIn(0f, 1f))
+                val left = i * (w + gap)
+                val barH = if (day.steps == null) w else maxOf(w, size.height * day.steps / top)
+                val color = when {
+                    day.steps == null -> Palette.LimeInk.copy(alpha = 0.18f)
+                    // El verde de "Feliz" se perdería sobre el fondo lima: aquí va en verde oscuro.
+                    day.mood == Mood.HAPPY -> Palette.LimeInk
+                    day.mood != null -> day.mood.color
+                    else -> Palette.Ink.copy(alpha = 0.25f)
+                }
+                val h = barH * p
+                if (h > 0.5f) drawRoundRect(color, Offset(left, size.height - h), Size(w, h), radius)
+            }
+        }
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 5.dp),
+            horizontalArrangement = Arrangement.spacedBy(7.dp),
+        ) {
+            week.forEachIndexed { i, day ->
+                val isToday = i == week.lastIndex
+                Text(
+                    days[day.date.sundayIndex()].take(1),
+                    style = MoodType.Small.copy(
+                        color = if (isToday) Palette.Ink else Palette.LimeInk,
+                        fontWeight = if (isToday) FontWeight.SemiBold else null,
+                        fontSize = 10.sp,
+                    ),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.weight(1f),
+                )
             }
         }
     }

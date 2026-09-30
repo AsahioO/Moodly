@@ -117,6 +117,11 @@
     <string name="body_mind">Cuerpo y mente</string>
     <string name="sleep_last_night">Sueño de anoche</string>
     <string name="stress_level">Nivel de estrés</string>
+    <string name="steps_today">Pasos de hoy</string>
+    <string name="unit_steps">pasos</string>
+    <string name="steps_no_data">Sin datos hoy</string>
+    <string name="steps_best">Mejor: %1$s · %2$s</string>
+    <string name="cd_steps_best">Mejor día de la semana: %1$s</string>
     <string name="no_entries_month">Aún no hay registros este mes.</string>
     <plurals name="days_count">
         <item quantity="one">%d día</item>

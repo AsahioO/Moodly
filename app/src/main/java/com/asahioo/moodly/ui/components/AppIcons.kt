@@ -49,6 +49,13 @@ object AppIcons {
         GCircle(9f, 10f, 1.2f), GCircle(15f, 10f, 1.2f),
         GStroke("M8.5 16c2-1.5 5-1.5 7 0", SW),
     )
+    val Steps = GlyphSpec(
+        24f,
+        GFill("M7 3c1.9 0 3 1.8 3 4.3 0 2.2-.8 3.7-.8 5.2H5.8C5.8 11 4 9.5 4 7.3 4 4.8 5.1 3 7 3z"),
+        GRoundRect(5.8f, 13.6f, 3.4f, 3.2f, 1.6f),
+        GFill("M17 7c1.9 0 3 1.8 3 4.3 0 2.2-1.8 3.7-1.8 5.2h-3.4c0-1.5-.8-3-.8-5.2 0-2.5 1.1-4.3 3-4.3z"),
+        GRoundRect(14.8f, 17.6f, 3.4f, 3.2f, 1.6f),
+    )
     val Puzzle = GlyphSpec(24f, GFill("M4 7h4.2a2.8 2.8 0 1 1 5.6 0H18v4.2a2.8 2.8 0 1 1 0 5.6V21H4z"))
 
     // Íconos a color para los avisos (viewBox 40x40).

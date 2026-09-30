@@ -28,12 +28,18 @@ data class HomeUiState(
     val customTagLabels: Map<String, String> = emptyMap(),
     val stress: StressLevel? = null,
     val quizIndex: Int = 0,
+    /** Últimos 7 días, hoy al final. */
+    val week: List<StepDay> = emptyList(),
 ) {
     val quizTotal: Int get() = StressQuiz.size
     val quizDone: Boolean get() = quizIndex >= quizTotal
     val firstName: String get() = userName.substringBefore(' ')
     val sleepMinutes: Int? get() = todayContext?.sleepMinutes
+    val steps: Int? get() = todayContext?.steps
 }
+
+/** Pasos de un día (null = sin dato de Health Connect) y el ánimo registrado ese día. */
+data class StepDay(val date: LocalDate, val steps: Int?, val mood: Mood?)
 
 sealed interface HomeEvent {
     data class QuizCompleted(val level: StressLevel) : HomeEvent
@@ -55,6 +61,10 @@ class HomeViewModel(
                 customTagLabels = d.customTags.associate { it.id to it.label },
                 stress = d.stress,
                 quizIndex = d.quiz.index,
+                week = (6 downTo 0).map {
+                    val date = today.minusDays(it.toLong())
+                    StepDay(date, d.days[date.toString()]?.steps, d.moods[date.toString()])
+                },
             )
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), HomeUiState(dates.today()))

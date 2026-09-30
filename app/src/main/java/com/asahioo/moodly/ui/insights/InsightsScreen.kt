@@ -78,12 +78,16 @@ import com.asahioo.moodly.ui.theme.LocalReduceMotion
 import com.asahioo.moodly.ui.theme.MoodType
 import com.asahioo.moodly.ui.theme.Motion
 import com.asahioo.moodly.ui.theme.Palette
+import java.text.NumberFormat
 
 @Composable
 fun InsightsScreen(
     state: InsightsUiState,
     onBack: () -> Unit,
     onOpenSleep: () -> Unit,
+    /** Solo con el permiso de pasos concedido en Health Connect. */
+    showSteps: Boolean,
+    onOpenSettings: () -> Unit,
     onOpenStress: () -> Unit,
 ) {
     val pop = rememberStagger(Unit, totalMs = 1500)
@@ -153,6 +157,33 @@ fun InsightsScreen(
                         } else {
                             RollingText(stress, style = MoodType.Big.copy(fontSize = 28.sp)) { level: StressLevel ->
                                 stringResource(level.labelRes)
+                            }
+                        }
+                    }
+                }
+                if (showSteps) {
+                    val steps = state.steps
+                    MiniCard(
+                        title = stringResource(R.string.steps_today),
+                        color = Palette.Lime,
+                        onClick = onOpenSettings,
+                        modifier = Modifier
+                            .padding(top = 6.dp)
+                            .fillMaxWidth()
+                            .staggered(pop, 540, 700, 30.dp, easing = Motion.Navigation),
+                    ) {
+                        if (steps == null) {
+                            EmptyValue(stringResource(R.string.steps_no_data), MoodType.Big.copy(fontSize = 28.sp))
+                        } else {
+                            Row {
+                                AnimatedNumber(
+                                    steps,
+                                    MoodType.Big.copy(fontSize = 28.sp),
+                                    Modifier.alignByBaseline(),
+                                    format = { NumberFormat.getIntegerInstance().format(it) },
+                                )
+                                Spacer(Modifier.width(5.dp))
+                                Text(stringResource(R.string.unit_steps), style = MoodType.BigUnit.copy(fontSize = 17.sp), modifier = Modifier.alignByBaseline())
                             }
                         }
                     }
