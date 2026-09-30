@@ -59,13 +59,13 @@ object AppIcons {
     val Search = GlyphSpec(24f, GStroke("M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM16.5 16.5L20.5 20.5", SW))
     val Puzzle =GlyphSpec(24f, GFill("M4 7h4.2a2.8 2.8 0 1 1 5.6 0H18v4.2a2.8 2.8 0 1 1 0 5.6V21H4z"))
 
-    // Íconos a color para los avisos (viewBox 40x40).
-    val ToastCheck = GlyphSpec(
+    // Íconos a color para los avisos (viewBox 40x40). Getters: lima, durazno y tinta siguen al tema.
+    val ToastCheck get() = GlyphSpec(
         40f,
         GCircle(20f, 20f, 19f, fill = Palette.Lime),
         GStroke("M13 20.5l4.5 4.5 9-9.5", 2.6f, Palette.Ink),
     )
-    val ToastSleep = GlyphSpec(
+    val ToastSleep get() = GlyphSpec(
         40f,
         GCircle(20f, 20f, 19f, fill = Palette.Peach),
         GFill("M24.5 12.5a8.5 8.5 0 1 0 5 12.4A7 7 0 0 1 24.5 12.5z", Palette.Ink),

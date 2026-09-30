@@ -107,7 +107,7 @@ class IslandToastState(private val scope: CoroutineScope) {
 
 val LocalToast = staticCompositionLocalOf<IslandToastState> { error("IslandToastState no provisto") }
 
-/** Fondo pastel: el icono conserva su color pleno y resalta sobre la tarjeta. */
+/** Fondo pastel (mezcla con el fondo del tema, así en oscuro queda un tinte oscuro): el icono conserva su color pleno y resalta sobre la tarjeta. */
 private val ToastIcon.tint: Color
     get() = lerp(
         when (this) {
@@ -116,7 +116,7 @@ private val ToastIcon.tint: Color
             ToastIcon.Sleep -> Palette.MoodSleepy
             ToastIcon.Alert -> Palette.Peach
         },
-        Color.White,
+        Palette.Paper,
         0.55f,
     )
 
@@ -195,7 +195,7 @@ fun IslandToast(state: IslandToastState, modifier: Modifier = Modifier) {
         // targetValue cubre el frame en que se cierra, antes de que arranque la animación de salida.
         if (shown != null && (open || appear.targetValue > 0f || appear.isRunning)) {
             val shape = RoundedCornerShape(24.dp)
-            val shadowColor = Palette.Ink.copy(alpha = 0.18f)
+            val shadowColor = Palette.FaceInk.copy(alpha = 0.18f)
             Row(
                 Modifier
                     .widthIn(max = 420.dp)
@@ -222,7 +222,7 @@ fun IslandToast(state: IslandToastState, modifier: Modifier = Modifier) {
                         if (!reduce) {
                             val h = 3.dp.toPx()
                             drawRect(
-                                Palette.Ink.copy(alpha = 0.18f),
+                                Palette.FaceInk.copy(alpha = 0.18f),
                                 topLeft = Offset(0f, size.height - h),
                                 size = Size(size.width * progress.value, h),
                             )
@@ -266,8 +266,8 @@ fun IslandToast(state: IslandToastState, modifier: Modifier = Modifier) {
 private fun ToastIconView(icon: ToastIcon, modifier: Modifier) {
     when (icon) {
         is ToastIcon.OfMood -> MoodIcon(icon.mood, modifier)
-        ToastIcon.Check -> Glyph(AppIcons.ToastCheck, modifier)
-        ToastIcon.Sleep -> Glyph(AppIcons.ToastSleep, modifier)
+        ToastIcon.Check -> Glyph(remember(Palette.theme) { AppIcons.ToastCheck }, modifier)
+        ToastIcon.Sleep -> Glyph(remember(Palette.theme) { AppIcons.ToastSleep }, modifier)
         ToastIcon.Alert -> Glyph(AppIcons.ToastAlert, modifier)
     }
 }

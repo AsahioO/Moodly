@@ -24,7 +24,8 @@ private val tightLines = LineHeightStyle(
 
 /** Escala tipográfica de la app. */
 object MoodType {
-    val Base = TextStyle(fontFamily = InterTight, color = Palette.Ink, fontSize = 14.sp)
+    // Sin color: lo toma de LocalContentColor, que MoodlyTheme ata al tema vigente.
+    val Base = TextStyle(fontFamily = InterTight, fontSize = 14.sp)
 
     val Display = Base.copy(
         fontSize = 43.sp, fontWeight = FontWeight.Bold, letterSpacing = (-0.035).em,
@@ -47,7 +48,8 @@ object MoodType {
     val Label = Base.copy(fontSize = 12.5.sp, fontWeight = FontWeight.Medium)
     val Chip = Base.copy(fontSize = 13.sp, fontWeight = FontWeight.Medium)
     val Section = Base.copy(fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
-    val Caption = Base.copy(fontSize = 12.sp, color = Palette.Grey)
+    // Getters: el gris cambia con el tema.
+    val Caption get() = Base.copy(fontSize = 12.sp, color = Palette.Grey)
     val Small = Base.copy(fontSize = 11.5.sp, lineHeight = 15.sp)
-    val Tiny = Base.copy(fontSize = 10.5.sp, color = Palette.Grey)
+    val Tiny get() = Base.copy(fontSize = 10.5.sp, color = Palette.Grey)
 }

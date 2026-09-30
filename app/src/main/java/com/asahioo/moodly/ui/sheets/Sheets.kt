@@ -93,7 +93,7 @@ import kotlin.math.roundToInt
 import kotlinx.coroutines.launch
 
 @Composable
-private fun SheetHeader(eyebrow: String, title: String) {
+internal fun SheetHeader(eyebrow: String, title: String) {
     Text(eyebrow, style = MoodType.Label.copy(color = Palette.Grey))
     Text(
         title,
@@ -336,7 +336,8 @@ internal fun SheetTextField(
     onDone: (() -> Unit)? = null,
     trailing: (@Composable () -> Unit)? = null,
 ) {
-    val style = MoodType.Body
+    // BasicTextField no lee LocalContentColor: el color va explícito.
+    val style = MoodType.Body.copy(color = Palette.Ink)
     BasicTextField(
         value = value,
         onValueChange = onValueChange,

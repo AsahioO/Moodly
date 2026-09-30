@@ -1,32 +1,51 @@
 package com.asahioo.moodly.ui.theme
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
+import com.asahioo.moodly.data.model.AppTheme
 
-/** Paleta tomada del diseño de referencia. */
+/*
+ * Paleta tomada del diseño de referencia. Los tokens de tema leen [theme], un estado de Compose:
+ * quien los use en composición o en dibujo se actualiza solo al cambiar de tema.
+ * No los guardes en un `val` de archivo ni en un `remember` sin clave: se quedarían con el tema viejo.
+ */
 object Palette {
-    val Ink = Color(0xFF141414)
-    val Paper = Color(0xFFFFFFFF)
-    val Mist = Color(0xFFF3F3F4)
-    val Mist2 = Color(0xFFECECEE)
-    val Future = Color(0xFFF7F7F8)
-    val Track = Color(0xFFE4E4E7)
-    val Grey = Color(0xFF9A9A9F)
-    val Grey2 = Color(0xFF6E6E73)
-    val Divider = Color(0xFFE3E3E6)
+    // ponytail: estado global; cambiar de tema recompone la pantalla visible. Pasar a CompositionLocal si estorba.
+    var theme by mutableStateOf(AppTheme.Classic)
+
+    private val c get() = colorsFor(theme)
+
+    val Ink get() = c.ink
+    val Paper get() = c.paper
+    val Mist get() = c.mist
+    val Mist2 get() = c.mist2
+    val Future get() = c.future
+    val Track get() = c.track
+    val Grey get() = c.grey
+    val Grey2 get() = c.grey2
+    val Divider get() = c.divider
+    val IsDark get() = c.paper.luminance() < 0.5f
+    val TabIdle get() = c.tabIdle
+    val SwitchOff get() = c.switchOff
+
+    val Peach get() = c.peach
+    val PeachInk get() = c.peachInk
+    val PeachLite get() = c.peachLite
+    val Lavender get() = c.lavender
+    val LavenderInk get() = c.lavenderInk
+    val Lime get() = c.lime
+    val LimeInk get() = c.limeInk
+
+    // Fijos en todos los temas.
+    /** Trazo de las caras: debe coincidir con `res/drawable/ic_mood_*.xml`. */
+    val FaceInk = Color(0xFF141414)
     val Night = Color(0xFF0D0D0D)
     val Night2 = Color(0xFF262626)
-    val TabIdle = Color(0xFF808085)
-    val SwitchOff = Color(0xFFD5D5D9)
     val Danger = Color(0xFFE0443A)
     val DangerFill = Color(0xFFE6453B)
-
-    val Peach = Color(0xFFF7A984)
-    val PeachInk = Color(0xFFE47F52)
-    val PeachLite = Color(0xFFFBC6A9)
-    val Lavender = Color(0xFFDDBDF8)
-    val LavenderInk = Color(0xFFA477E4)
-    val Lime = Color(0xFFA6EB8C)
-    val LimeInk = Color(0xFF3F6B30)
 
     val MoodHappy = Color(0xFFA6EB8C)
     val MoodAngry = Color(0xFFFF9A5E)

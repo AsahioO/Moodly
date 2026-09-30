@@ -149,6 +149,14 @@
     <string name="replay_intro">Repetir introducción</string>
     <string name="reset_data">Borrar todos los datos</string>
     <string name="app_lock">Bloqueo de la app</string>
+    <string name="theme_setting">Tema de color</string>
+    <string name="theme_classic">Clásico</string>
+    <string name="theme_honey">Miel</string>
+    <string name="theme_clay">Arcilla</string>
+    <string name="theme_sea">Bruma</string>
+    <string name="theme_rose">Rosa polvo</string>
+    <string name="theme_oat">Avena</string>
+    <string name="theme_ember">Brasa</string>
     <string name="app_lock_sub">Pide tu huella, rostro o PIN al abrir</string>
     <string name="lock_title">Moodly está bloqueado</string>
     <string name="lock_unlock">Desbloquear</string>

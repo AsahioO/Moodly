@@ -9,8 +9,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.compose.runtime.getValue
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.asahioo.moodly.ui.AppLock
@@ -41,7 +43,8 @@ class MainActivity : FragmentActivity() {
             navigationBarStyle = SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT),
         )
         setContent {
-            MoodlyTheme {
+            val state by appViewModel.uiState.collectAsStateWithLifecycle()
+            MoodlyTheme(state.settings.theme) {
                 MoodlyRoot(appViewModel, onUnlock = ::promptUnlock)
             }
         }

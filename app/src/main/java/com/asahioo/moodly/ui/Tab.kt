@@ -24,4 +24,5 @@ sealed interface SheetRequest {
     /** El texto del archivo elegido queda pendiente hasta que el usuario confirme. */
     data class Import(val text: String) : SheetRequest
     data object Tags : SheetRequest
+    data object Theme : SheetRequest
 }

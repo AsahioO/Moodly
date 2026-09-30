@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import com.asahioo.moodly.R
+import com.asahioo.moodly.data.model.AppTheme
 import com.asahioo.moodly.data.model.DayPart
 import com.asahioo.moodly.data.model.Mood
 import com.asahioo.moodly.data.model.PresetTag
@@ -56,6 +57,18 @@ val Mood.messageRes: Int
         Mood.BORED -> R.string.mood_msg_bored
         Mood.CALM -> R.string.mood_msg_calm
         Mood.STRESSED -> R.string.mood_msg_stressed
+    }
+
+@get:StringRes
+val AppTheme.labelRes: Int
+    get() = when (this) {
+        AppTheme.Classic -> R.string.theme_classic
+        AppTheme.Honey -> R.string.theme_honey
+        AppTheme.Clay -> R.string.theme_clay
+        AppTheme.Sea -> R.string.theme_sea
+        AppTheme.Rose -> R.string.theme_rose
+        AppTheme.Oat -> R.string.theme_oat
+        AppTheme.Ember -> R.string.theme_ember
     }
 
 @get:StringRes

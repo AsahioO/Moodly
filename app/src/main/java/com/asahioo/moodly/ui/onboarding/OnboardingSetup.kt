@@ -90,7 +90,7 @@ internal fun NameStep(name: String, onNameChange: (String) -> Unit, onContinue: 
     }
 
     SetupPage(stringResource(R.string.ob_name_title), stringResource(R.string.ob_name_sub)) {
-        val style = MoodType.Base.copy(fontSize = 20.sp)
+        val style = MoodType.Base.copy(fontSize = 20.sp, color = Palette.Ink)
         BasicTextField(
             value = name,
             onValueChange = onNameChange,

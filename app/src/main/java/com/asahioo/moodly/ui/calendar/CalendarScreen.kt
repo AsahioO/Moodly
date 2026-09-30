@@ -31,8 +31,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -288,7 +290,7 @@ private fun DayCellView(cell: DayCell, onClick: () -> Unit, modifier: Modifier) 
                     .padding(bottom = 3.dp)
                     .size(4.dp)
                     .clip(CircleShape)
-                    .background(Palette.Ink.copy(alpha = 0.4f)),
+                    .background((if (cell.mood != null) Palette.FaceInk else Palette.Ink).copy(alpha = 0.4f)),
             )
         }
     }
@@ -307,6 +309,9 @@ private fun SummaryCard(summary: MonthSummary, pop: Stagger) {
             .clip(RoundedCornerShape(22.dp))
             .background(bg),
     ) {
+        // Los colores de ánimo son claros en todos los temas: encima va la tinta fija de las caras.
+        val ink = if (top != null) Palette.FaceInk else Palette.Ink
+        CompositionLocalProvider(LocalContentColor provides ink) {
         Column(Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 18.dp)) {
             Text(stringResource(R.string.month_summary), style = MoodType.Label)
             RollingText(
@@ -316,9 +321,10 @@ private fun SummaryCard(summary: MonthSummary, pop: Stagger) {
             ) { mood -> if (mood == null) stringResource(R.string.no_entries) else stringResource(mood.labelRes) }
             Text(
                 if (top == null) stringResource(R.string.no_entries_msg) else stringResource(top.messageRes),
-                style = MoodType.Small.copy(color = Palette.Ink.copy(alpha = 0.58f)),
+                style = MoodType.Small.copy(color = ink.copy(alpha = 0.58f)),
                 modifier = Modifier.fillMaxWidth(0.58f),
             )
+        }
         }
         AnimatedContent(
             targetState = top,
@@ -335,7 +341,8 @@ private fun SummaryCard(summary: MonthSummary, pop: Stagger) {
             if (mood != null) {
                 Glyph(
                     MoodGlyphs.bigFace(mood),
-                    Modifier
+                    tint = Palette.FaceInk,
+                    modifier = Modifier
                         .fillMaxSize()
                         .staggered(pop, 380, 900, 0.dp, 0.7f, Motion.Back),
                 )

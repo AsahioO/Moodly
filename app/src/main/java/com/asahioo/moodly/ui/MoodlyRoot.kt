@@ -96,6 +96,7 @@ import com.asahioo.moodly.ui.sheets.ResetSheet
 import com.asahioo.moodly.ui.sheets.SleepSheet
 import com.asahioo.moodly.ui.sheets.StressSheet
 import com.asahioo.moodly.ui.sheets.TagsSheet
+import com.asahioo.moodly.ui.sheets.ThemeSheet
 import com.asahioo.moodly.ui.theme.LocalReduceMotion
 import com.asahioo.moodly.ui.theme.MoodType
 import com.asahioo.moodly.ui.theme.Motion
@@ -211,13 +212,17 @@ fun MoodlyRoot(appViewModel: AppViewModel, onUnlock: () -> Unit) {
 
     val showOnboarding = !app.onboarded
 
-    // Íconos de la barra de navegación del sistema: oscuros sobre blanco, claros sobre negro.
+    // Íconos de las barras del sistema: oscuros sobre fondo claro, claros sobre negro o tema oscuro.
     val view = LocalView.current
-    val darkNavIcons = showOnboarding || sheet != null
+    val lightTheme = !Palette.IsDark
+    val darkNavIcons = lightTheme && (showOnboarding || sheet != null)
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as? Activity)?.window ?: return@SideEffect
-            WindowCompat.getInsetsController(window, view).isAppearanceLightNavigationBars = darkNavIcons
+            WindowCompat.getInsetsController(window, view).apply {
+                isAppearanceLightNavigationBars = darkNavIcons
+                isAppearanceLightStatusBars = lightTheme
+            }
         }
     }
 
@@ -412,6 +417,7 @@ fun MoodlyRoot(appViewModel: AppViewModel, onUnlock: () -> Unit) {
                                 }
                             },
                             onPickReminderTime = { sheet = SheetRequest.Reminder },
+                            onPickTheme = { sheet = SheetRequest.Theme },
                             health = healthStatus,
                             onHealthChange = { enabled ->
                                 if (enabled) {
@@ -574,6 +580,10 @@ fun MoodlyRoot(appViewModel: AppViewModel, onUnlock: () -> Unit) {
                             sheet = null
                             enableReminder(minutes)
                         },
+                    )
+                    SheetRequest.Theme -> ThemeSheet(
+                        selected = app.settings.theme,
+                        onSelect = appViewModel::setTheme,
                     )
                     SheetRequest.Tags -> TagsSheet(
                         customTags = app.customTags,

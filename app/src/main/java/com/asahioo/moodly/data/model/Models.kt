@@ -66,6 +66,10 @@ data class DayContext(
 /** Lo que Health Connect reporta para un día; null = sin dato. No se persiste tal cual. */
 data class HealthDay(val sleepMinutes: Int?, val steps: Int?)
 
+/** Tema de color. Se serializa por nombre: nunca renombrar ni reordenar, solo agregar al final. */
+@Serializable
+enum class AppTheme { Classic, Honey, Clay, Sea, Rose, Oat, Ember }
+
 @Serializable
 data class Settings(
     val haptics: Boolean = true,
@@ -77,6 +81,7 @@ data class Settings(
     val appLock: Boolean = false,
     /** Nombre del JPEG de la foto de perfil en filesDir; null = ilustración por defecto. */
     val avatarFile: String? = null,
+    val theme: AppTheme = AppTheme.Classic,
 ) {
     companion object {
         const val DEFAULT_REMINDER_MINUTES = 21 * 60

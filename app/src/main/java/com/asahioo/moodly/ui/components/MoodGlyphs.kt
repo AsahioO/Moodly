@@ -106,11 +106,11 @@ object MoodGlyphs {
 
 /** Solo la cara (para celdas del calendario). */
 @Composable
-fun MoodFace(mood: Mood, modifier: Modifier = Modifier) = Glyph(MoodGlyphs.face(mood), modifier)
+fun MoodFace(mood: Mood, modifier: Modifier = Modifier) = Glyph(MoodGlyphs.face(mood), modifier, tint = Palette.FaceInk)
 
 /** Figura de color + cara (chips, hojas, avisos). */
 @Composable
-fun MoodIcon(mood: Mood, modifier: Modifier = Modifier) = Glyph(MoodGlyphs.icon(mood), modifier)
+fun MoodIcon(mood: Mood, modifier: Modifier = Modifier) = Glyph(MoodGlyphs.icon(mood), modifier, tint = Palette.FaceInk)
 
 /**
  * Pose de un gesto idle en p ∈ [0, 1]: cuerpo (graphicsLayer, traslaciones en dp) + rasgos de la
@@ -289,8 +289,9 @@ fun AnimatedMoodIcon(mood: Mood, active: Boolean, modifier: Modifier = Modifier)
     val origin = if (MoodIdle.anchoredAtBase(mood)) TransformOrigin(0.5f, 1f) else TransformOrigin.Center
     Glyph(
         MoodGlyphs.icon(mood),
+        tint = Palette.FaceInk,
         // Después del modifier del llamador: sus drawBehind (p. ej. el estallido del chip) no se mueven.
-        modifier.graphicsLayer {
+        modifier = modifier.graphicsLayer {
             val pose = MoodIdle.pose(mood, p.value)
             transformOrigin = origin
             scaleX = pose.scaleX
@@ -310,7 +311,7 @@ fun AnimatedMoodIcon(mood: Mood, active: Boolean, modifier: Modifier = Modifier)
 object OnboardingGlyphs {
     private const val SW = 4.6f
     private const val FACE = 4f
-    private val Ink = Palette.Ink
+    private val Ink = Palette.FaceInk
 
     val Blue = GlyphSpec(
         100f, 100f, listOf(

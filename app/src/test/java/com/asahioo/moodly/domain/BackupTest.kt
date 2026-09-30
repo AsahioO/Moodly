@@ -1,8 +1,10 @@
 package com.asahioo.moodly.domain
 
 import com.asahioo.moodly.data.model.AppData
+import com.asahioo.moodly.data.model.AppTheme
 import com.asahioo.moodly.data.model.DayContext
 import com.asahioo.moodly.data.model.Mood
+import com.asahioo.moodly.data.model.Settings
 import kotlinx.serialization.json.Json
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -49,5 +51,16 @@ class BackupTest {
     fun avatarFile_isDropped() {
         val withPhoto = sample.copy(settings = sample.settings.copy(avatarFile = "avatar_1.jpg"))
         assertNull(Backup.decode(json, Backup.encode(json, withPhoto))?.settings?.avatarFile)
+    }
+
+    @Test
+    fun theme_survivesRoundTrip() {
+        val themed = sample.copy(settings = sample.settings.copy(theme = AppTheme.Clay))
+        assertEquals(AppTheme.Clay, Backup.decode(json, Backup.encode(json, themed))?.settings?.theme)
+    }
+
+    @Test
+    fun settingsWithoutTheme_decodeAsClassic() {
+        assertEquals(AppTheme.Classic, json.decodeFromString<Settings>("""{"haptics":false}""").theme)
     }
 }

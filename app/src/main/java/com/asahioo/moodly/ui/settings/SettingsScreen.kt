@@ -42,6 +42,7 @@ import com.asahioo.moodly.ui.components.SectionTitle
 import com.asahioo.moodly.ui.components.bounceClick
 import com.asahioo.moodly.ui.components.rememberStagger
 import com.asahioo.moodly.ui.components.staggered
+import com.asahioo.moodly.ui.labelRes
 import com.asahioo.moodly.ui.monthName
 import com.asahioo.moodly.ui.timeOfDay
 import com.asahioo.moodly.ui.theme.MoodType
@@ -59,6 +60,7 @@ fun SettingsScreen(
     onReduceMotionChange: (Boolean) -> Unit,
     onReminderChange: (Boolean) -> Unit,
     onPickReminderTime: () -> Unit,
+    onPickTheme: () -> Unit,
     health: HealthStatus,
     onHealthChange: (Boolean) -> Unit,
     onInstallHealth: () -> Unit,
@@ -144,6 +146,13 @@ fun SettingsScreen(
                         subtitle = stringResource(R.string.app_lock_sub),
                         checked = settings.appLock,
                         onChange = onAppLockChange,
+                    )
+                    Divider()
+                    ActionRow(
+                        title = stringResource(R.string.theme_setting),
+                        color = Palette.Ink,
+                        onClick = onPickTheme,
+                        value = stringResource(settings.theme.labelRes),
                     )
                 }
 

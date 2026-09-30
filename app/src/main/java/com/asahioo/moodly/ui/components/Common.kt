@@ -186,7 +186,7 @@ fun PrimaryButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     container: Color = Palette.Ink,
-    content: Color = Color.White,
+    content: Color = Palette.Paper,
     enabled: Boolean = true,
 ) {
     Box(

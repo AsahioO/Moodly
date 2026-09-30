@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.asahioo.moodly.data.health.HealthConnect
 import com.asahioo.moodly.data.health.HealthStatus
+import com.asahioo.moodly.data.model.AppTheme
 import com.asahioo.moodly.data.model.CustomTag
 import com.asahioo.moodly.data.model.DayContext
 import com.asahioo.moodly.data.model.DayPart
@@ -78,6 +79,7 @@ class AppViewModel(
 
     fun replayOnboarding() = launchSet { repository.setOnboarded(false) }
     fun setHaptics(enabled: Boolean) = launchSet { repository.updateSettings { it.copy(haptics = enabled) } }
+    fun setTheme(theme: AppTheme) = launchSet { repository.updateSettings { it.copy(theme = theme) } }
     fun setReduceMotion(enabled: Boolean) = launchSet { repository.updateSettings { it.copy(reduceMotion = enabled) } }
     fun setReminderEnabled(enabled: Boolean) = launchSet { repository.updateSettings { it.copy(reminderEnabled = enabled) } }
     fun setReminderTime(minutes: Int) = launchSet {
