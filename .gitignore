@@ -12,3 +12,8 @@
 # Graphify — todo el grafo es local, se regenera con `graphify extract . --code-only`
 graphify-out/
 .claude
+
+# Firma de release: NUNCA subir
+keystore.properties
+*.jks
+*.keystore
