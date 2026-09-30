@@ -3,10 +3,12 @@ package com.asahioo.moodly.domain
 import com.asahioo.moodly.data.model.AppData
 import com.asahioo.moodly.data.model.CustomTag
 import com.asahioo.moodly.data.model.DayContext
+import com.asahioo.moodly.data.model.HealthDay
 import com.asahioo.moodly.data.model.Mood
 import com.asahioo.moodly.data.model.PresetTag
 import com.asahioo.moodly.data.model.StressLevel
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -196,4 +198,36 @@ class StreakTest {
 
     @Test
     fun onlyOlderDays_isZero() = assertEquals(0, MoodStats.streak(logged(2, 3), today))
+}
+
+class HealthMergeTest {
+
+    @Test
+    fun manualSleep_isNeverOverwritten() {
+        val manual = DayContext(sleepMinutes = 420)
+        val merged = manual.withHealth(HealthDay(sleepMinutes = 300, steps = null))
+        assertEquals(420, merged.sleepMinutes)
+        assertFalse(merged.sleepFromHealth)
+    }
+
+    @Test
+    fun healthSleep_isUpdatedByLaterSync() {
+        val first = DayContext().withHealth(HealthDay(sleepMinutes = 300, steps = null))
+        assertTrue(first.sleepFromHealth)
+        assertEquals(460, first.withHealth(HealthDay(sleepMinutes = 460, steps = null)).sleepMinutes)
+    }
+
+    @Test
+    fun missingOrZero_keepsWhatWasThere() {
+        val day = DayContext(sleepMinutes = 400, sleepFromHealth = true, steps = 3_000)
+        assertEquals(day, day.withHealth(HealthDay(sleepMinutes = null, steps = 0)))
+    }
+
+    @Test
+    fun stepsAlone_isNotEmpty() {
+        val day = DayContext().withHealth(HealthDay(sleepMinutes = null, steps = 1_200))
+        assertEquals(1_200, day.steps)
+        assertFalse(day.isEmpty)
+        assertFalse(day.hasEntry)
+    }
 }
