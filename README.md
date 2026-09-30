@@ -2,6 +2,21 @@
 
 App nativa de Android para llevar el registro diario del ánimo, hecha con **Kotlin + Jetpack Compose**. Toda la interfaz está en español. Los datos viven solo en el teléfono: no hay cuenta, servidor ni analítica.
 
+<p align="center">
+  <img src="docs/screenshots/01-inicio.png" width="22%" alt="Inicio" />
+  <img src="docs/screenshots/02-resumen.png" width="22%" alt="Resumen del mes" />
+  <img src="docs/screenshots/03-calendario.png" width="22%" alt="Calendario de ánimo" />
+  <img src="docs/screenshots/04-temas.png" width="22%" alt="Temas de color" />
+</p>
+<p align="center">
+  <img src="docs/screenshots/05-inicio-oscuro.png" width="22%" alt="Inicio, tema Brasa" />
+  <img src="docs/screenshots/06-calendario-oscuro.png" width="22%" alt="Calendario, tema Brasa" />
+</p>
+
+## Descarga
+
+Baja el APK más reciente desde [Releases](../../releases/latest). También puedes seguirlo con [Obtainium](https://github.com/ImranR98/Obtainium) apuntando a este repositorio.
+
 ## Funciones
 
 - **Registro diario** de 6 ánimos (Feliz, Enojado, Somnoliento, Aburrido, Tranquilo, Estresado) con caras vectoriales animadas.
@@ -24,7 +39,7 @@ App nativa de Android para llevar el registro diario del ánimo, hecha con **Kot
 2. Si no existe `local.properties`, créalo con `sdk.dir=<ruta a tu Android SDK>` (Android Studio lo genera solo). Está en `.gitignore`.
 3. Deja que Gradle sincronice; la primera vez descarga Gradle 8.14.3 y las dependencias.
 4. Ejecuta en un teléfono o emulador con **Run ▶**. Health Connect requiere Android 9 o superior con el proveedor instalado; sin él la sección se muestra deshabilitada.
-5. Para juzgar la fluidez real usa la variante **release** (`Build Variants → release`). Compose en debug es mucho más lento. Release activa R8 y se firma con la llave de debug solo para pruebas locales: no sirve para Play Store.
+5. Para juzgar la fluidez real usa la variante **release** (`Build Variants → release`). Compose en debug es mucho más lento. Release activa R8 y se firma con tu llave si existe `keystore.properties` en la raíz (ignorado por git, con `storeFile`, `storePassword`, `keyAlias` y `keyPassword`); sin ese archivo cae a la llave de debug.
 
 > El proyecto se escribió sin poder compilarlo en el entorno donde se generó. Si aparece un error de compilación o sincronización, pégalo tal cual para corregirlo puntualmente.
 
