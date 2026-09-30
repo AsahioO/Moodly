@@ -35,6 +35,5 @@ object Palette {
     val MoodCalm = Color(0xFFFFD84D)
     val MoodStressed = Color(0xFFD9B1FF)
 
-    val ToastSub = Color(0xFFA5A5AA)
     val Scrim = Color(0x6B08080C)
 }
