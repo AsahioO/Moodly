@@ -347,7 +347,6 @@ fun MoodlyRoot(appViewModel: AppViewModel, onUnlock: () -> Unit) {
                         )
                         Tab.Insights -> InsightsScreen(
                             state = insights,
-                            onBack = { openTab(Tab.Home) },
                             onOpenSleep = { sheet = SheetRequest.Sleep },
                             showSteps = (healthStatus as? HealthStatus.Connected)?.steps == true,
                             onOpenSettings = { openTab(Tab.Settings) },
@@ -355,7 +354,6 @@ fun MoodlyRoot(appViewModel: AppViewModel, onUnlock: () -> Unit) {
                         )
                         Tab.Calendar -> CalendarScreen(
                             state = calendar,
-                            onBack = { openTab(Tab.Home) },
                             onPickMonth = { sheet = SheetRequest.MonthPicker },
                             onSearch = { showSearch = true },
                             onDayClick = { cell ->
@@ -381,7 +379,6 @@ fun MoodlyRoot(appViewModel: AppViewModel, onUnlock: () -> Unit) {
                             userName = app.userName,
                             trackingSince = app.trackingSince,
                             settings = app.settings,
-                            onBack = { openTab(Tab.Home) },
                             onHapticsChange = { enabled ->
                                 appViewModel.setHaptics(enabled)
                                 toast.show(
