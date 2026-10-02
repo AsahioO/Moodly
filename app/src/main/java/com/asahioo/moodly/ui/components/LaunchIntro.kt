@@ -25,6 +25,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.asahioo.moodly.R
+import com.asahioo.moodly.data.model.Mood
 import com.asahioo.moodly.ui.theme.LocalReduceMotion
 import com.asahioo.moodly.ui.theme.Motion
 import com.asahioo.moodly.ui.theme.MoodType
@@ -79,7 +80,7 @@ fun LaunchIntro(onFinished: () -> Unit) {
                 }
             }
             .drawBehind {
-                // Dos anillos lima que se expanden desde el logo durante el salto.
+                // Dos anillos del color de Feliz que se expanden desde el logo durante el salto.
                 val r0 = START_SIZE.toPx() / 2f
                 for (i in 0..1) {
                     val p = ramp(t.value, 300f + i * 130f, 950f + i * 130f)
@@ -96,7 +97,7 @@ fun LaunchIntro(onFinished: () -> Unit) {
         contentAlignment = Alignment.Center,
     ) {
         Glyph(
-            OnboardingGlyphs.Green,
+            OnboardingGlyphs.shape(Mood.HAPPY),
             Modifier
                 .size(START_SIZE)
                 .graphicsLayer {
@@ -111,6 +112,7 @@ fun LaunchIntro(onFinished: () -> Unit) {
                     translationY = (1f - sy) * size.height / 2f - 10.dp.toPx() * win(v, 220f, 600f)
                 },
             look = { Offset(win(t.value, 600f, 760f) * -1f + win(t.value, 740f, 900f), 0f) },
+            tint = Palette.FaceInk,
             blink = { win(t.value, 830f, 970f) },
         )
         Row(Modifier.offset(y = START_SIZE / 2 + 44.dp)) {

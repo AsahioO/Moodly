@@ -66,6 +66,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import com.asahioo.moodly.R
 import com.asahioo.moodly.data.model.AppData
+import com.asahioo.moodly.data.model.Mood
 import com.asahioo.moodly.ui.components.AppIcons
 import com.asahioo.moodly.ui.components.Glyph
 import com.asahioo.moodly.ui.components.GlyphSpec
@@ -92,24 +93,26 @@ import kotlinx.coroutines.launch
  * [radius] = radio de colisión como fracción del ancho.
  */
 private class ShapeSpot(
-    val glyph: GlyphSpec,
-    val dizzy: GlyphSpec,
+    mood: Mood,
     val x: Float,
     val y: Float,
     val w: Float,
     val rotation: Float,
     val radius: Float,
     val blinks: Boolean = false,
-)
+) {
+    val glyph: GlyphSpec = OnboardingGlyphs.shape(mood)
+    val dizzy: GlyphSpec = OnboardingGlyphs.dizzy(mood)
+}
 
 private val Spots = listOf(
-    ShapeSpot(OnboardingGlyphs.Blue, OnboardingGlyphs.BlueDizzy, 3.6f, 64.4f, 43.8f, 0f, 0.47f),
-    ShapeSpot(OnboardingGlyphs.Pink, OnboardingGlyphs.PinkDizzy, -4.4f, 34.8f, 39f, 0f, 0.47f, blinks = true),
-    ShapeSpot(OnboardingGlyphs.Triangle, OnboardingGlyphs.TriangleDizzy, 59f, 59.4f, 41.5f, -6f, 0.40f),
-    ShapeSpot(OnboardingGlyphs.Orange, OnboardingGlyphs.OrangeDizzy, 68.2f, 28.7f, 34.6f, 12f, 0.46f, blinks = true),
-    ShapeSpot(OnboardingGlyphs.Green, OnboardingGlyphs.GreenDizzy, 19.5f, 8.7f, 36.9f, 0f, 0.47f),
-    ShapeSpot(OnboardingGlyphs.Purple, OnboardingGlyphs.PurpleDizzy, 58f, 0.2f, 34.6f, -10f, 0.47f, blinks = true),
-    ShapeSpot(OnboardingGlyphs.Bolt, OnboardingGlyphs.BoltDizzy, 35.9f, 30.4f, 34.6f, 8f, 0.46f),
+    ShapeSpot(Mood.CALM, 3.6f, 64.4f, 43.8f, 0f, 0.44f),
+    ShapeSpot(Mood.BORED, -4.4f, 34.8f, 39f, 0f, 0.44f),
+    ShapeSpot(Mood.ANGRY, 59f, 59.4f, 41.5f, -6f, 0.44f, blinks = true),
+    ShapeSpot(Mood.SLEEPY, 68.2f, 28.7f, 34.6f, 12f, 0.40f),
+    ShapeSpot(Mood.HAPPY, 19.5f, 8.7f, 36.9f, 0f, 0.45f, blinks = true),
+    ShapeSpot(Mood.STRESSED, 58f, 0.2f, 34.6f, -10f, 0.45f, blinks = true),
+    ShapeSpot(Mood.HAPPY, 35.9f, 30.4f, 30f, 8f, 0.45f, blinks = true),
 )
 
 /** Orden de caída (índices de [Spots]): primero las de abajo, así la pila se parece al diseño. */
@@ -489,7 +492,7 @@ private fun PhysicsShape(
                     val d = v.getDistance()
                     if (d > 1f) v / d else v
                 }
-                drawGlyph(if (body.dizzy > 0f) spot.dizzy else spot.glyph, Palette.Ink, look, blink.value)
+                drawGlyph(if (body.dizzy > 0f) spot.dizzy else spot.glyph, Palette.FaceInk, look, blink.value)
             },
     )
 }

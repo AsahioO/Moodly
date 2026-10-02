@@ -3,10 +3,10 @@
     <string name="app_name">Moodly</string>
 
     <!-- Onboarding -->
-    <string name="ob_line_1">¿No sabes</string>
-    <string name="ob_line_2">cómo te</string>
-    <string name="ob_line_3">sientes?</string>
-    <string name="ob_cta">¡Te ayudamos!</string>
+    <string name="ob_line_1">Ponle</string>
+    <string name="ob_line_2">nombre a lo</string>
+    <string name="ob_line_3">que sientes</string>
+    <string name="ob_cta">Empezar</string>
     <string name="ob_cd">Introducción. Arrastra o toca las figuras.</string>
     <string name="ob_name_title">¿Cómo te llamas?</string>
     <string name="ob_name_sub">Así te saludamos cada día.</string>
