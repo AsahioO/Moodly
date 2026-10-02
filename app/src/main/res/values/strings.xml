@@ -68,7 +68,7 @@
     <string name="mood_calm">Tranquilo</string>
     <string name="mood_stressed">Estresado</string>
 
-    <string name="mood_msg_happy">Te sientes tranquilo y optimista. ¡Sigue con esa buena vibra!</string>
+    <string name="mood_msg_happy">La alegría llevó la delantera este mes. Anota qué la trajo para repetirlo.</string>
     <string name="mood_msg_angry">Ha sido un mes tenso. Pausas cortas y caminar pueden ayudar.</string>
     <string name="mood_msg_sleepy">Tu energía ha estado baja. Intenta dormirte más temprano.</string>
     <string name="mood_msg_bored">Las cosas se sienten planas. Planea algo pequeño que te ilusione.</string>
@@ -93,15 +93,15 @@
     <string name="stress_tip_high_3">Habla con alguien de confianza sobre cómo te sientes.</string>
 
     <!-- Calendario -->
-    <string name="calendar_title">Calendario de ánimo</string>
+    <string name="calendar_title">Calendario</string>
     <string name="month_year">%1$s, %2$d</string>
     <string name="month_summary">Resumen del mes</string>
     <string name="no_entries">Sin registros</string>
     <string name="no_entries_msg">Toca un día para registrar cómo te sentiste.</string>
     <string name="logged">Registrados</string>
     <string name="days_unit">Días</string>
-    <string name="discipline">Disciplina</string>
-    <string name="focus_score">Enfoque</string>
+    <string name="discipline">Constancia</string>
+    <string name="focus_score">de los días</string>
     <string name="cd_back">Atrás</string>
     <string name="cd_pick_month">Elegir mes</string>
     <string name="search_open">Buscar en tu historial</string>
