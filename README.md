@@ -5,12 +5,13 @@ App nativa de Android para llevar el registro diario del ánimo, hecha con **Kot
 <p align="center">
   <img src="docs/screenshots/01-inicio.png" width="22%" alt="Inicio" />
   <img src="docs/screenshots/02-resumen.png" width="22%" alt="Resumen del mes" />
-  <img src="docs/screenshots/03-calendario.png" width="22%" alt="Calendario de ánimo" />
-  <img src="docs/screenshots/04-temas.png" width="22%" alt="Temas de color" />
+  <img src="docs/screenshots/03-calendario.png" width="22%" alt="Calendario" />
+  <img src="docs/screenshots/04-ajustes.png" width="22%" alt="Ajustes" />
 </p>
 <p align="center">
   <img src="docs/screenshots/05-inicio-oscuro.png" width="22%" alt="Inicio, tema Brasa" />
   <img src="docs/screenshots/06-calendario-oscuro.png" width="22%" alt="Calendario, tema Brasa" />
+  <img src="docs/screenshots/07-introduccion.png" width="22%" alt="Introducción" />
 </p>
 
 ## Descarga
@@ -19,10 +20,10 @@ Baja el APK más reciente desde [Releases](../../releases/latest). También pued
 
 ## Funciones
 
-- **Registro diario** de 6 ánimos (Feliz, Enojado, Somnoliento, Aburrido, Tranquilo, Estresado) con caras vectoriales animadas.
+- **Registro diario** de 6 ánimos (Feliz, Enojado, Somnoliento, Aburrido, Tranquilo, Estresado) con caras vectoriales animadas: un blob con silueta propia por ánimo.
 - **Contexto del día**: nota corta, etiquetas incluidas y propias, y horas de sueño.
 - **Estrés**: indicador y quiz corto que calcula un nivel bajo, medio o alto.
-- **Calendario** de ánimo por mes y **Resumen** del mes (ánimo principal, disciplina de registro, dona por ánimo).
+- **Calendario** de ánimo por mes y **Resumen** del mes (ánimo principal, constancia de registro, barra de proporciones por ánimo).
 - **Racha** de días consecutivos con registro.
 - **Patrones**: coincidencias entre tus etiquetas, sueño y pasos y tu ánimo.
 - **Health Connect** (opcional): importa sueño y pasos, solo lectura.
@@ -136,13 +137,13 @@ Conectar es opcional (Ajustes → Health Connect). Moodly solo **lee**, y solo c
 ## Animaciones
 
 - **Splash nativo** (core-splashscreen) hasta que carga el estado, sin parpadeo.
-- **Introducción**: las figuras caen con gravedad y rebote, luego flotan. Se arrastran (regresan con resorte) o se tocan (se aplastan como gelatina). Al tocar "¡Te ayudamos!" caen fuera de la pantalla.
+- **Introducción**: las figuras caen con gravedad y rebote, luego flotan. Se arrastran (regresan con resorte) o se tocan (se aplastan como gelatina). Al tocar "Empezar" caen fuera de la pantalla.
 - **Caras con gesto propio**: la cara seleccionada repite un gesto característico tras pausas de 2.5 a 6 segundos.
 - **Pestañas** estilo push/pop: la pantalla nueva entra completa y la anterior se desplaza y se atenúa.
 - **Atrás predictivo de Android**: desde Resumen, Calendario o Ajustes, el gesto arrastra la pantalla siguiendo el dedo y revela Inicio. Las hojas inferiores también responden.
 - **Hojas inferiores** con resorte, arrastre para cerrar y la pantalla de fondo encogiéndose como en iOS.
 - **Avisos heads-up**: una tarjeta baja desde la barra de estado, tintada con el color del ánimo, con barra de progreso; se descarta deslizándola hacia arriba o tras 2.4 s.
-- Entrada escalonada del inicio, barras que crecen con rebote, contadores animados, celdas del calendario que brotan en diagonal, deslizamiento entre meses con rebote en los límites y dona que crece en sentido horario.
+- Entrada escalonada del inicio, barras que crecen con rebote, contadores animados, celdas del calendario que brotan en diagonal, deslizamiento entre meses con rebote en los límites y barra de distribución que crece de izquierda a derecha.
 - **Vibración nativa** (`HapticFeedbackConstants`) en toques, confirmaciones y errores; se apaga en Ajustes.
 - **Reducir animaciones** (Ajustes) simplifica transiciones y quita las entradas escalonadas y los gestos de las caras.
 
