@@ -24,9 +24,8 @@
     <string name="tab_settings">Ajustes</string>
 
     <!-- Inicio -->
-    <string name="welcome_back">Bienvenido de nuevo</string>
-    <string name="greeting">¡Hola %1$s! ¿Cómo te sientes hoy?</string>
-    <string name="greeting_anon">¡Hola! ¿Cómo te sientes hoy?</string>
+    <string name="greeting">¿Qué tal va tu día, %1$s?</string>
+    <string name="greeting_anon">¿Qué tal va tu día?</string>
     <string name="no_data">—</string>
     <string name="tap_to_log">Toca para registrar</string>
     <string name="take_quiz">Haz el quiz</string>
@@ -48,6 +47,7 @@
     <string name="cd_log_mood">Registrar ánimo de hoy: %1$s</string>
     <string name="cd_sleep_card">Duración del sueño: %1$d horas %2$d minutos. Toca para editar.</string>
     <string name="home_add_context">Agregar nota o etiquetas</string>
+    <string name="home_pick_title">Hoy me siento…</string>
     <string name="cd_edit_context">Editar nota y etiquetas de hoy</string>
     <string name="cd_stress_card">Indicador de estrés: %1$s. Toca para ver detalles.</string>
 
@@ -318,8 +318,8 @@
 
     <!-- Registro rápido: notificación y widget -->
     <string name="reminder_channel">Recordatorio diario</string>
-    <string name="reminder_title">¿Cómo te sientes hoy, %1$s?</string>
-    <string name="reminder_title_anon">¿Cómo te sientes hoy?</string>
+    <string name="reminder_title">¿Qué tal va tu día, %1$s?</string>
+    <string name="reminder_title_anon">¿Qué tal va tu día?</string>
     <string name="reminder_text">Toca una cara para registrarlo.</string>
     <string name="cd_quick_log">Registrar %1$s</string>
     <string name="widget_label">Ánimo de hoy</string>
