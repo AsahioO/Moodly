@@ -2,20 +2,15 @@ package com.asahioo.moodly.ui.search
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,7 +32,7 @@ import com.asahioo.moodly.domain.HistoryEntry
 import com.asahioo.moodly.domain.HistorySearch
 import com.asahioo.moodly.ui.components.MoodIcon
 import com.asahioo.moodly.ui.components.NavHeader
-import com.asahioo.moodly.ui.components.PanelShape
+import com.asahioo.moodly.ui.components.Screen
 import com.asahioo.moodly.ui.components.SectionTitle
 import com.asahioo.moodly.ui.components.bounceClick
 import com.asahioo.moodly.ui.labelRes
@@ -70,74 +65,53 @@ fun SearchScreen(
         HistorySearch.search(moods, days, customTags, query, mood, presetTags, customIds)
     }
 
-    BoxWithConstraints(
-        Modifier
-            .fillMaxSize()
-            .background(Palette.Night),
-    ) {
-        val viewport = maxHeight
-        Column(
-            Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
+    Screen {
+        NavHeader(
+            title = stringResource(R.string.search_title),
+            subtitle = stringResource(R.string.search_count, results.size),
+            onBack = onBack,
+        )
+        SheetTextField(
+            value = query,
+            onValueChange = { query = it.take(QUERY_MAX) },
+            hint = stringResource(R.string.search_hint),
+            singleLine = true,
+            modifier = Modifier.padding(top = 22.dp),
+        )
+
+        SectionTitle(stringResource(R.string.search_mood))
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .heightIn(min = viewport)
-                    .clip(PanelShape)
-                    .background(Palette.Paper)
-                    .statusBarsPadding()
-                    .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 22.dp),
-            ) {
-                NavHeader(
-                    title = stringResource(R.string.search_title),
-                    subtitle = stringResource(R.string.search_count, results.size),
-                    onBack = onBack,
-                )
-                SheetTextField(
-                    value = query,
-                    onValueChange = { query = it.take(QUERY_MAX) },
-                    hint = stringResource(R.string.search_hint),
-                    singleLine = true,
-                    modifier = Modifier.padding(top = 22.dp),
-                )
+            Mood.entries.forEach { m ->
+                TagChip(stringResource(m.labelRes), selected = mood == m) { mood = if (mood == m) null else m }
+            }
+        }
 
-                SectionTitle(stringResource(R.string.search_mood))
-                FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                    verticalArrangement = Arrangement.spacedBy(6.dp),
-                ) {
-                    Mood.entries.forEach { m ->
-                        TagChip(stringResource(m.labelRes), selected = mood == m) { mood = if (mood == m) null else m }
-                    }
+        SectionTitle(stringResource(R.string.day_tags))
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp),
+        ) {
+            PresetTag.entries.forEach { tag ->
+                TagChip(stringResource(tag.labelRes), selected = tag in presetTags) {
+                    presetTags = if (tag in presetTags) presetTags - tag else presetTags + tag
                 }
+            }
+            customTags.forEach { tag ->
+                TagChip(tag.label, selected = tag.id in customIds) {
+                    customIds = if (tag.id in customIds) customIds - tag.id else customIds + tag.id
+                }
+            }
+        }
 
-                SectionTitle(stringResource(R.string.day_tags))
-                FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                    verticalArrangement = Arrangement.spacedBy(6.dp),
-                ) {
-                    PresetTag.entries.forEach { tag ->
-                        TagChip(stringResource(tag.labelRes), selected = tag in presetTags) {
-                            presetTags = if (tag in presetTags) presetTags - tag else presetTags + tag
-                        }
-                    }
-                    customTags.forEach { tag ->
-                        TagChip(tag.label, selected = tag.id in customIds) {
-                            customIds = if (tag.id in customIds) customIds - tag.id else customIds + tag.id
-                        }
-                    }
-                }
-
-                SectionTitle(stringResource(R.string.search_results))
-                if (results.isEmpty()) {
-                    Text(stringResource(R.string.search_empty), style = MoodType.Caption)
-                } else {
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        results.take(MAX_RESULTS).forEach { entry -> ResultRow(entry, customTags, onOpenDay) }
-                    }
-                }
+        SectionTitle(stringResource(R.string.search_results))
+        if (results.isEmpty()) {
+            Text(stringResource(R.string.search_empty), style = MoodType.Caption)
+        } else {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                results.take(MAX_RESULTS).forEach { entry -> ResultRow(entry, customTags, onOpenDay) }
             }
         }
     }

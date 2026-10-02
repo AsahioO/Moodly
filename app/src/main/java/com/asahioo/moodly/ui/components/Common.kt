@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -44,7 +45,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.asahioo.moodly.R
@@ -54,9 +54,7 @@ import com.asahioo.moodly.ui.theme.Motion
 import com.asahioo.moodly.ui.theme.Palette
 import kotlin.math.roundToInt
 
-/** Panel blanco con esquinas inferiores redondeadas sobre el fondo negro. */
-val PanelShape = RoundedCornerShape(bottomStart = 30.dp, bottomEnd = 30.dp)
-val CardShape = RoundedCornerShape(22.dp)
+val CardShape = RoundedCornerShape(26.dp)
 
 /** Número que cuenta hasta su valor cada vez que cambia. */
 @Composable
@@ -129,32 +127,32 @@ fun CircleIconButton(
     }
 }
 
-/** Encabezado de pantalla: atrás, título centrado con subtítulo animado y acción opcional. */
+/**
+ * Encabezado de pantalla: subtítulo animado encima de un título grande, alineados a la izquierda.
+ * Atrás solo en pantallas fuera de las pestañas (la barra ya lleva de vuelta a Inicio).
+ */
 @Composable
 fun NavHeader(
     title: String,
     subtitle: String,
-    onBack: () -> Unit,
     modifier: Modifier = Modifier,
-    action: (@Composable () -> Unit)? = null,
+    onBack: (() -> Unit)? = null,
+    actions: (@Composable RowScope.() -> Unit)? = null,
 ) {
     Row(modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-        CircleIconButton(AppIcons.Back, stringResource(R.string.cd_back), onBack)
-        Column(
-            Modifier
-                .weight(1f)
-                .padding(horizontal = 8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
+        if (onBack != null) {
+            CircleIconButton(AppIcons.Back, stringResource(R.string.cd_back), onBack)
+            Spacer(Modifier.width(12.dp))
+        }
+        Column(Modifier.weight(1f)) {
+            RollingText(subtitle, style = MoodType.Caption) { it }
             Text(
                 title,
-                style = MoodType.Title,
-                textAlign = TextAlign.Center,
+                style = MoodType.ScreenTitle,
                 modifier = Modifier.semantics { heading() },
             )
-            RollingText(subtitle, style = MoodType.Caption) { it }
         }
-        Box(Modifier.size(40.dp), contentAlignment = Alignment.Center) { action?.invoke() }
+        actions?.invoke(this)
     }
 }
 

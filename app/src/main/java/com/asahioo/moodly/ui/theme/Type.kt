@@ -35,6 +35,10 @@ object MoodType {
         fontSize = 29.sp, fontWeight = FontWeight.SemiBold, letterSpacing = (-0.025).em,
         lineHeight = 34.sp, lineHeightStyle = tightLines,
     )
+    val ScreenTitle = Base.copy(
+        fontSize = 27.sp, fontWeight = FontWeight.SemiBold, letterSpacing = (-0.03).em,
+        lineHeight = 32.sp, lineHeightStyle = tightLines,
+    )
     val Big = Base.copy(fontSize = 34.sp, fontWeight = FontWeight.Medium, letterSpacing = (-0.04).em)
     val BigUnit = Base.copy(fontSize = 21.sp, fontWeight = FontWeight.Normal, letterSpacing = (-0.02).em)
     val SummaryTitle = Base.copy(fontSize = 36.sp, fontWeight = FontWeight.Medium, letterSpacing = (-0.04).em)
