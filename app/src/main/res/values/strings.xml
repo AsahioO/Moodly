@@ -33,6 +33,7 @@
     <string name="cd_stress_card_empty">Indicador de estrés: sin datos. Toca para ver detalles.</string>
     <string name="cd_menu">Menú</string>
     <string name="cd_profile">Abrir ajustes</string>
+    <string name="cd_change_avatar">Cambiar foto de perfil</string>
     <string name="sleep_duration">Duración del sueño</string>
     <string name="stress_indicator">Indicador de estrés</string>
     <string name="quiz_title">Quiz de Sí o No</string>

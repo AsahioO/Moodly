@@ -3,7 +3,6 @@ package com.asahioo.moodly.ui.settings
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,11 +12,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -37,7 +33,7 @@ import com.asahioo.moodly.ui.components.Avatar
 import com.asahioo.moodly.ui.components.Glyph
 import com.asahioo.moodly.ui.components.MoodSwitch
 import com.asahioo.moodly.ui.components.NavHeader
-import com.asahioo.moodly.ui.components.PanelShape
+import com.asahioo.moodly.ui.components.Screen
 import com.asahioo.moodly.ui.components.SectionTitle
 import com.asahioo.moodly.ui.components.bounceClick
 import com.asahioo.moodly.ui.components.rememberStagger
@@ -55,7 +51,6 @@ fun SettingsScreen(
     userName: String,
     trackingSince: LocalDate?,
     settings: Settings,
-    onBack: () -> Unit,
     onHapticsChange: (Boolean) -> Unit,
     onReduceMotionChange: (Boolean) -> Unit,
     onReminderChange: (Boolean) -> Unit,
@@ -74,158 +69,139 @@ fun SettingsScreen(
     onPickAvatar: () -> Unit,
 ) {
     val pop = rememberStagger(Unit, totalMs = 1000)
-    BoxWithConstraints(
-        Modifier
-            .fillMaxSize()
-            .background(Palette.Night),
-    ) {
-        val viewport = maxHeight
+    Screen {
+        NavHeader(
+            title = stringResource(R.string.settings_title),
+            subtitle = stringResource(R.string.settings_sub),
+        )
         Column(
             Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
+                .padding(top = 18.dp)
+                .fillMaxWidth()
+                .staggered(pop, 40, 600, 20.dp, 0.96f, Motion.Navigation),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Column(
+            Avatar(
+                settings.avatarFile,
                 Modifier
-                    .fillMaxWidth()
-                    .heightIn(min = viewport)
-                    .clip(PanelShape)
-                    .background(Palette.Paper)
-                    .statusBarsPadding()
-                    .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 22.dp),
-            ) {
-                NavHeader(
-                    title = stringResource(R.string.settings_title),
-                    subtitle = stringResource(R.string.settings_sub),
-                    onBack = onBack,
-                )
-                Row(
-                    Modifier
-                        .padding(top = 22.dp)
-                        .staggered(pop, 40, 600, 20.dp, 0.96f, Motion.Navigation)
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(22.dp))
-                        .bounceClick(onClick = onPickAvatar, pressedScale = 0.98f)
-                        .background(Palette.Lime)
-                        .padding(14.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Avatar(settings.avatarFile, Modifier.size(60.dp))
-                    Spacer(Modifier.width(14.dp))
-                    Column {
-                        if (userName.isNotBlank()) {
-                            Text(userName, style = MoodType.Base.copy(fontSize = 19.sp, fontWeight = FontWeight.SemiBold))
-                        }
-                        if (trackingSince != null) {
-                            Text(
-                                stringResource(R.string.checking_since, monthName(trackingSince.monthValue), trackingSince.year),
-                                style = MoodType.Base.copy(fontSize = 12.sp, color = Palette.Ink.copy(alpha = 0.6f)),
-                            )
-                        }
-                    }
-                }
-
-                SectionTitle(stringResource(R.string.preferences), Modifier.staggered(pop, 120, 500, 12.dp))
-                Group(Modifier.staggered(pop, 160, 600, 20.dp, easing = Motion.Navigation)) {
-                    ToggleRow(
-                        title = stringResource(R.string.haptics),
-                        subtitle = stringResource(R.string.haptics_sub),
-                        checked = settings.haptics,
-                        onChange = onHapticsChange,
-                    )
-                    Divider()
-                    ToggleRow(
-                        title = stringResource(R.string.reduce_motion),
-                        subtitle = stringResource(R.string.reduce_motion_sub),
-                        checked = settings.reduceMotion,
-                        onChange = onReduceMotionChange,
-                    )
-                    Divider()
-                    ToggleRow(
-                        title = stringResource(R.string.app_lock),
-                        subtitle = stringResource(R.string.app_lock_sub),
-                        checked = settings.appLock,
-                        onChange = onAppLockChange,
-                    )
-                    Divider()
-                    ActionRow(
-                        title = stringResource(R.string.theme_setting),
-                        color = Palette.Ink,
-                        onClick = onPickTheme,
-                        value = stringResource(settings.theme.labelRes),
-                    )
-                }
-
-                SectionTitle(stringResource(R.string.reminder_section), Modifier.staggered(pop, 200, 500, 12.dp))
-                Group(Modifier.staggered(pop, 240, 600, 20.dp, easing = Motion.Navigation)) {
-                    ToggleRow(
-                        title = stringResource(R.string.reminder_daily),
-                        subtitle = stringResource(R.string.reminder_daily_sub),
-                        checked = settings.reminderEnabled,
-                        onChange = onReminderChange,
-                    )
-                    Divider()
-                    ActionRow(
-                        title = stringResource(R.string.reminder_time),
-                        color = Palette.Ink,
-                        onClick = onPickReminderTime,
-                        value = timeOfDay(settings.reminderMinutes),
-                    )
-                }
-
-                SectionTitle(stringResource(R.string.health_section), Modifier.staggered(pop, 280, 500, 12.dp))
-                Group(Modifier.staggered(pop, 320, 600, 20.dp, easing = Motion.Navigation)) {
-                    when (health) {
-                        HealthStatus.Unavailable -> Text(
-                            stringResource(R.string.health_unavailable),
-                            style = MoodType.Caption,
-                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 18.dp),
-                        )
-                        HealthStatus.NeedsUpdate -> ActionRow(stringResource(R.string.health_update), Palette.Ink, onInstallHealth)
-                        HealthStatus.Disconnected, is HealthStatus.Connected -> ToggleRow(
-                            title = stringResource(R.string.health_connect),
-                            subtitle = stringResource(
-                                when {
-                                    health !is HealthStatus.Connected -> R.string.health_sub_off
-                                    health.sleep && health.steps -> R.string.health_sub_both
-                                    health.sleep -> R.string.health_sub_sleep
-                                    else -> R.string.health_sub_steps
-                                }
-                            ),
-                            checked = health is HealthStatus.Connected,
-                            onChange = onHealthChange,
-                        )
-                    }
-                }
-
-                SectionTitle(stringResource(R.string.app_section), Modifier.staggered(pop, 320, 500, 12.dp))
-                Group(Modifier.staggered(pop, 360, 600, 20.dp, easing = Motion.Navigation)) {
-                    ActionRow(
-                        title = stringResource(R.string.tags_setting),
-                        color = Palette.Ink,
-                        onClick = onManageTags,
-                        value = customTagCount.takeIf { it > 0 }?.toString(),
-                    )
-                    Divider()
-                    ActionRow(stringResource(R.string.replay_intro), Palette.Ink, onReplayIntro)
-                    Divider()
-                    ActionRow(stringResource(R.string.backup_export), Palette.Ink, onExportBackup)
-                    Divider()
-                    ActionRow(stringResource(R.string.backup_import), Palette.Ink, onImportBackup)
-                    Divider()
-                    ActionRow(stringResource(R.string.reset_data), Palette.Danger, onResetData)
-                }
-
+                    .size(96.dp)
+                    .bounceClick(onClick = onPickAvatar, pressedScale = 0.94f, onClickLabel = stringResource(R.string.cd_change_avatar)),
+            )
+            if (userName.isNotBlank()) {
                 Text(
-                    stringResource(R.string.footer_local),
-                    style = MoodType.Base.copy(fontSize = 11.5.sp, color = Palette.Grey),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 18.dp),
+                    userName,
+                    style = MoodType.ScreenTitle,
+                    modifier = Modifier.padding(top = 12.dp),
+                )
+            }
+            if (trackingSince != null) {
+                Text(
+                    stringResource(R.string.checking_since, monthName(trackingSince.monthValue), trackingSince.year),
+                    style = MoodType.Caption,
+                    modifier = Modifier.padding(top = 2.dp),
                 )
             }
         }
+
+        SectionTitle(stringResource(R.string.preferences), Modifier.staggered(pop, 120, 500, 12.dp))
+        Group(Modifier.staggered(pop, 160, 600, 20.dp, easing = Motion.Navigation)) {
+            ToggleRow(
+                title = stringResource(R.string.haptics),
+                subtitle = stringResource(R.string.haptics_sub),
+                checked = settings.haptics,
+                onChange = onHapticsChange,
+            )
+            Divider()
+            ToggleRow(
+                title = stringResource(R.string.reduce_motion),
+                subtitle = stringResource(R.string.reduce_motion_sub),
+                checked = settings.reduceMotion,
+                onChange = onReduceMotionChange,
+            )
+            Divider()
+            ToggleRow(
+                title = stringResource(R.string.app_lock),
+                subtitle = stringResource(R.string.app_lock_sub),
+                checked = settings.appLock,
+                onChange = onAppLockChange,
+            )
+            Divider()
+            ActionRow(
+                title = stringResource(R.string.theme_setting),
+                color = Palette.Ink,
+                onClick = onPickTheme,
+                value = stringResource(settings.theme.labelRes),
+            )
+        }
+
+        SectionTitle(stringResource(R.string.reminder_section), Modifier.staggered(pop, 200, 500, 12.dp))
+        Group(Modifier.staggered(pop, 240, 600, 20.dp, easing = Motion.Navigation)) {
+            ToggleRow(
+                title = stringResource(R.string.reminder_daily),
+                subtitle = stringResource(R.string.reminder_daily_sub),
+                checked = settings.reminderEnabled,
+                onChange = onReminderChange,
+            )
+            Divider()
+            ActionRow(
+                title = stringResource(R.string.reminder_time),
+                color = Palette.Ink,
+                onClick = onPickReminderTime,
+                value = timeOfDay(settings.reminderMinutes),
+            )
+        }
+
+        SectionTitle(stringResource(R.string.health_section), Modifier.staggered(pop, 280, 500, 12.dp))
+        Group(Modifier.staggered(pop, 320, 600, 20.dp, easing = Motion.Navigation)) {
+            when (health) {
+                HealthStatus.Unavailable -> Text(
+                    stringResource(R.string.health_unavailable),
+                    style = MoodType.Caption,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 18.dp),
+                )
+                HealthStatus.NeedsUpdate -> ActionRow(stringResource(R.string.health_update), Palette.Ink, onInstallHealth)
+                HealthStatus.Disconnected, is HealthStatus.Connected -> ToggleRow(
+                    title = stringResource(R.string.health_connect),
+                    subtitle = stringResource(
+                        when {
+                            health !is HealthStatus.Connected -> R.string.health_sub_off
+                            health.sleep && health.steps -> R.string.health_sub_both
+                            health.sleep -> R.string.health_sub_sleep
+                            else -> R.string.health_sub_steps
+                        }
+                    ),
+                    checked = health is HealthStatus.Connected,
+                    onChange = onHealthChange,
+                )
+            }
+        }
+
+        SectionTitle(stringResource(R.string.app_section), Modifier.staggered(pop, 320, 500, 12.dp))
+        Group(Modifier.staggered(pop, 360, 600, 20.dp, easing = Motion.Navigation)) {
+            ActionRow(
+                title = stringResource(R.string.tags_setting),
+                color = Palette.Ink,
+                onClick = onManageTags,
+                value = customTagCount.takeIf { it > 0 }?.toString(),
+            )
+            Divider()
+            ActionRow(stringResource(R.string.replay_intro), Palette.Ink, onReplayIntro)
+            Divider()
+            ActionRow(stringResource(R.string.backup_export), Palette.Ink, onExportBackup)
+            Divider()
+            ActionRow(stringResource(R.string.backup_import), Palette.Ink, onImportBackup)
+            Divider()
+            ActionRow(stringResource(R.string.reset_data), Palette.Danger, onResetData)
+        }
+
+        Text(
+            stringResource(R.string.footer_local),
+            style = MoodType.Base.copy(fontSize = 11.5.sp, color = Palette.Grey),
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 18.dp),
+        )
     }
 }
 
