@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Ícono pequeño de notificación: carita feliz monocromática. -->
+<!-- Ícono pequeño de notificación: blob feliz monocromático. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp"
     android:height="24dp"
-    android:viewportWidth="100"
-    android:viewportHeight="100">
-    <path
-        android:pathData="M6,50a44,44 0,1 0,88 0a44,44 0,1 0,-88 0z"
-        android:strokeWidth="9"
-        android:strokeColor="#FFFFFFFF" />
-    <path
-        android:pathData="M28,45q7.5,7 15,0M57,45q7.5,7 15,0M33,62q17,15 34,0"
-        android:strokeWidth="9"
-        android:strokeColor="#FFFFFFFF"
-        android:strokeLineCap="round" />
+    android:viewportWidth="40"
+    android:viewportHeight="40">
+    <path android:pathData="M20 4C30.5 4 37.5 12 37.5 23C37.5 32.5 31 36.5 20 36.5S2.5 32.5 2.5 23C2.5 12 9.5 4 20 4z" android:strokeColor="#FFFFFFFF" android:strokeWidth="3.4" />
+    <path android:fillColor="#FFFFFFFF" android:pathData="M13.4,18.5a1.6,2.3 0 1,0 3.2,0a1.6,2.3 0 1,0 -3.2,0z" />
+    <path android:fillColor="#FFFFFFFF" android:pathData="M23.4,18.5a1.6,2.3 0 1,0 3.2,0a1.6,2.3 0 1,0 -3.2,0z" />
+    <path android:fillColor="#FFFFFFFF" android:pathData="M14.5 24h11q-1.2 6.5-5.5 6.5t-5.5-6.5z" />
 </vector>

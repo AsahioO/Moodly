@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.luminance
 import com.asahioo.moodly.data.model.AppTheme
 
 /*
- * Paleta tomada del diseño de referencia. Los tokens de tema leen [theme], un estado de Compose:
+ * Paleta de la app. Los tokens de tema leen [theme], un estado de Compose:
  * quien los use en composición o en dibujo se actualiza solo al cambiar de tema.
  * No los guardes en un `val` de archivo ni en un `remember` sin clave: se quedarían con el tema viejo.
  */
@@ -47,12 +47,13 @@ object Palette {
     val Danger = Color(0xFFE0443A)
     val DangerFill = Color(0xFFE6453B)
 
-    val MoodHappy = Color(0xFFA6EB8C)
-    val MoodAngry = Color(0xFFFF9A5E)
-    val MoodSleepy = Color(0xFFA9C8FF)
-    val MoodBored = Color(0xFFFFA9E3)
-    val MoodCalm = Color(0xFFFFD84D)
-    val MoodStressed = Color(0xFFD9B1FF)
+    // Deben coincidir con res/drawable/ic_mood_*.xml y widget_bg_*.xml.
+    val MoodHappy = Color(0xFFFFB84D)
+    val MoodAngry = Color(0xFFF2766B)
+    val MoodSleepy = Color(0xFFA3A8F5)
+    val MoodBored = Color(0xFFD4BFA0)
+    val MoodCalm = Color(0xFF7FD1B9)
+    val MoodStressed = Color(0xFFE39AC9)
 
     val Scrim = Color(0x6B08080C)
 }

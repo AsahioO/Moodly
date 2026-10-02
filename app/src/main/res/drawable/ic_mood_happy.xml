@@ -5,7 +5,10 @@
     android:height="40dp"
     android:viewportWidth="40"
     android:viewportHeight="40">
-    <path android:fillColor="#A6EB8C" android:pathData="M1,20a19,19 0 1,0 38,0a19,19 0 1,0 -38,0z" />
-    <path android:pathData="M11 17q3 3 6 0M23 17q3 3 6 0M14 24q6 5.5 12 0" android:strokeColor="#141414" android:strokeWidth="2.4"
-        android:strokeLineCap="round" android:strokeLineJoin="round" />
+    <path android:fillColor="#FFB84D" android:pathData="M20 4C30.5 4 37.5 12 37.5 23C37.5 32.5 31 36.5 20 36.5S2.5 32.5 2.5 23C2.5 12 9.5 4 20 4z" />
+    <path android:fillColor="#F0846A" android:pathData="M10.2,22.5a2.3,1.5 0 1,0 4.6,0a2.3,1.5 0 1,0 -4.6,0z" />
+    <path android:fillColor="#F0846A" android:pathData="M25.2,22.5a2.3,1.5 0 1,0 4.6,0a2.3,1.5 0 1,0 -4.6,0z" />
+    <path android:fillColor="#141414" android:pathData="M13.4,18.5a1.6,2.3 0 1,0 3.2,0a1.6,2.3 0 1,0 -3.2,0z" />
+    <path android:fillColor="#141414" android:pathData="M23.4,18.5a1.6,2.3 0 1,0 3.2,0a1.6,2.3 0 1,0 -3.2,0z" />
+    <path android:fillColor="#141414" android:pathData="M14.5 24h11q-1.2 6.5-5.5 6.5t-5.5-6.5z" />
 </vector>
