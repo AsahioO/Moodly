@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
@@ -26,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -39,20 +41,23 @@ import com.asahioo.moodly.ui.Tab
 import com.asahioo.moodly.ui.theme.MoodType
 import com.asahioo.moodly.ui.theme.Palette
 
-/** Barra de pestañas: píldora sobre el papel, con ícono y nombre; la pestaña activa lleva una cápsula de tinta. */
+/** Hueco que deben reservar las pantallas bajo su contenido para no quedar tapadas por [TabBar]. */
+val TabBarClearance = 62.dp + 12.dp
+
+/** Barra de pestañas: píldora flotante sobre el contenido, con ícono y nombre; la pestaña activa lleva una cápsula de tinta. */
 @Composable
 fun TabBar(current: Tab, onSelect: (Tab) -> Unit, modifier: Modifier = Modifier) {
     Box(
         modifier
-            .fillMaxWidth()
-            .background(Palette.Paper)
             .navigationBarsPadding()
-            .padding(start = 16.dp, end = 16.dp, top = 6.dp, bottom = 10.dp),
+            .padding(start = 24.dp, end = 24.dp, bottom = 12.dp)
+            .widthIn(max = 380.dp),
     ) {
         BoxWithConstraints(
             Modifier
                 .fillMaxWidth()
                 .height(62.dp)
+                .shadow(16.dp, CircleShape, ambientColor = Palette.Ink.copy(alpha = 0.25f), spotColor = Palette.Ink.copy(alpha = 0.25f))
                 .clip(CircleShape)
                 .background(Palette.Mist)
                 .padding(5.dp),

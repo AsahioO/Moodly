@@ -2,9 +2,13 @@ package com.asahioo.moodly.ui.components
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
@@ -20,22 +24,34 @@ import com.asahioo.moodly.ui.theme.Palette
 /** Margen lateral de [Screen]. */
 val ScreenGutter = 20.dp
 
-/** Contenedor de cada pantalla: papel a pantalla completa, con scroll y los márgenes comunes. */
+/**
+ * Contenedor de cada pantalla: papel a pantalla completa, con scroll y los márgenes comunes.
+ * Con [fillViewport] mide al menos la altura visible, así los hijos con `weight` reparten el
+ * sobrante; si el contenido no cabe (pantalla pequeña, fuente grande) sigue haciendo scroll.
+ */
 @Composable
 fun Screen(
     modifier: Modifier = Modifier,
     scrollState: ScrollState = rememberScrollState(),
+    fillViewport: Boolean = false,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    Column(
+    BoxWithConstraints(
         modifier
             .fillMaxSize()
-            .background(Palette.Paper)
-            .verticalScroll(scrollState)
-            .statusBarsPadding()
-            .padding(start = ScreenGutter, end = ScreenGutter, top = 14.dp, bottom = 28.dp),
-        content = content,
-    )
+            .background(Palette.Paper),
+    ) {
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .verticalScroll(scrollState)
+                .then(if (fillViewport) Modifier.heightIn(min = maxHeight) else Modifier)
+                .statusBarsPadding()
+                .navigationBarsPadding()
+                .padding(start = ScreenGutter, end = ScreenGutter, top = 14.dp, bottom = 28.dp + TabBarClearance),
+            content = content,
+        )
+    }
 }
 
 /** Ocupa también los márgenes laterales de [Screen]: carruseles de borde a borde. */

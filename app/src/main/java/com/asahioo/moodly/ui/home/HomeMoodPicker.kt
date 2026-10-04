@@ -17,10 +17,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -81,13 +83,17 @@ internal fun MoodHero(mood: Mood?, modifier: Modifier = Modifier, content: @Comp
             .fillMaxWidth()
             .clip(CardShape)
             .background(bg)
-            .padding(start = 12.dp, end = 12.dp, top = 24.dp, bottom = 12.dp),
+            .padding(start = 12.dp, end = 12.dp, top = 16.dp, bottom = 12.dp),
+        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         AnimatedContent(
             targetState = mood,
+            // La cara crece o se encoge con el alto que le deje el héroe.
             modifier = Modifier
-                .size(112.dp)
+                .weight(1f, fill = false)
+                .sizeIn(minHeight = 72.dp, maxHeight = 128.dp)
+                .aspectRatio(1f, matchHeightConstraintsFirst = true)
                 .drawBehind {
                     val b = burst.value
                     if (b < 1f && mood != null) {

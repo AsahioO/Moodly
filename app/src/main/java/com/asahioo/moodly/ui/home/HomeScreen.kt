@@ -2,7 +2,6 @@ package com.asahioo.moodly.ui.home
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.animateFloatAsState
@@ -73,7 +72,6 @@ import com.asahioo.moodly.ui.components.EmptyValue
 import com.asahioo.moodly.ui.components.Glyph
 import com.asahioo.moodly.ui.components.RollingText
 import com.asahioo.moodly.ui.components.Screen
-import com.asahioo.moodly.ui.components.SectionTitle
 import com.asahioo.moodly.ui.components.Stagger
 import com.asahioo.moodly.ui.components.bounceClick
 import com.asahioo.moodly.ui.components.staggered
@@ -105,13 +103,16 @@ fun HomeScreen(
     showSteps: Boolean,
     scrollState: ScrollState = rememberScrollState(),
 ) {
-    Screen(scrollState = scrollState) {
+    Screen(scrollState = scrollState, fillViewport = true) {
         HomeHeader(state, avatarFile, onOpenSettings, stagger)
 
         MoodHero(
             state.todayMood,
+            // El héroe se queda con el alto sobrante: así todo Inicio cabe sin scroll.
             Modifier
                 .padding(top = 20.dp)
+                .weight(1f)
+                .heightIn(min = 190.dp)
                 .staggered(stagger, 120),
         ) {
             // Solo después de registrar: el toque rápido sigue siendo el camino principal.
@@ -123,13 +124,17 @@ fun HomeScreen(
                 ContextRow(state, onOpenContext)
             }
         }
-        MoodStrip(state.todayMood, stagger, onPickMood, Modifier.padding(top = 10.dp))
+        MoodStrip(state.todayMood, stagger, onPickMood, Modifier.padding(top = 6.dp))
 
-        SectionTitle(stringResource(R.string.body_mind), Modifier.staggered(stagger, 300))
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+        Row(
+            Modifier
+                .padding(top = 12.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+        ) {
             val cardModifier = Modifier
                 .weight(1f)
-                .height(190.dp)
+                .height(150.dp)
             SleepCard(
                 minutes = state.sleepMinutes,
                 onClick = onOpenSleep,
@@ -156,7 +161,7 @@ fun HomeScreen(
                 onAnswer = onAnswer,
                 onRestart = onRestartQuiz,
                 modifier = Modifier
-                    .padding(top = 12.dp)
+                    .padding(top = 10.dp)
                     .staggered(stagger, 460, 800, 40.dp, 0.94f, Motion.Navigation),
             )
         }
@@ -256,9 +261,9 @@ private fun SleepCard(minutes: Int?, onClick: () -> Unit, modifier: Modifier) {
         SleepBars(
             minutes ?: AppData.DEFAULT_SLEEP_MINUTES,
             Modifier
-                .padding(top = 14.dp, bottom = 10.dp)
+                .padding(top = 10.dp, bottom = 10.dp)
                 .fillMaxWidth()
-                .height(48.dp)
+                .height(36.dp)
                 .alpha(if (minutes == null) EMPTY_ALPHA else 1f),
         )
         Spacer(Modifier.weight(1f))
@@ -336,7 +341,7 @@ private fun WeekSteps(week: List<StepDay>, days: Array<String>, modifier: Modifi
         Canvas(
             Modifier
                 .fillMaxWidth()
-                .height(64.dp),
+                .height(44.dp),
         ) {
             val n = week.size
             val gap = 7.dp.toPx()
@@ -443,9 +448,9 @@ private fun StressCard(level: StressLevel?, onClick: () -> Unit, modifier: Modif
         StressBars(
             level ?: StressLevel.LOW,
             Modifier
-                .padding(top = 14.dp, bottom = 10.dp)
+                .padding(top = 10.dp, bottom = 10.dp)
                 .fillMaxWidth()
-                .height(48.dp)
+                .height(36.dp)
                 .alpha(if (level == null) EMPTY_ALPHA else 1f),
         )
         Spacer(Modifier.weight(1f))
@@ -529,7 +534,7 @@ private fun QuizCard(
             targetState = state.quizIndex,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 14.dp),
+                .padding(vertical = 10.dp),
             transitionSpec = {
                 (slideInHorizontally(tween(420, easing = Motion.EaseOut)) { it / 6 } + fadeIn(tween(300, 80))) togetherWith
                     (slideOutHorizontally(tween(200, easing = Motion.EaseIn)) { -it / 6 } + fadeOut(tween(160)))
@@ -557,27 +562,6 @@ private fun QuizCard(
                 }
             }
         }
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .padding(top = 12.dp),
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-        ) {
-            repeat(state.quizTotal) { i ->
-                val c by animateColorAsState(
-                    if (i < state.quizIndex) Palette.Ink else Palette.Ink.copy(alpha = 0.14f),
-                    tween(400),
-                    label = "dot",
-                )
-                Box(
-                    Modifier
-                        .weight(1f)
-                        .height(3.dp)
-                        .clip(RoundedCornerShape(2.dp))
-                        .background(c),
-                )
-            }
-        }
     }
 }
 
@@ -585,11 +569,11 @@ private fun QuizCard(
 private fun QuizButton(text: String, modifier: Modifier, onClick: () -> Unit) {
     Box(
         modifier
-            .heightIn(min = 40.dp)
+            .heightIn(min = 36.dp)
             .bounceClick(onClick = onClick, pressedScale = 0.95f)
             .clip(RoundedCornerShape(12.dp))
             .background(Palette.Ink)
-            .padding(vertical = 10.dp),
+            .padding(vertical = 8.dp),
         contentAlignment = Alignment.Center,
     ) {
         Text(text, style = MoodType.Base.copy(color = Palette.Paper, fontWeight = MoodType.Chip.fontWeight), textAlign = TextAlign.Center)

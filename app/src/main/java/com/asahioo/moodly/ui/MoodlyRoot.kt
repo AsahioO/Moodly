@@ -682,20 +682,14 @@ private fun MainTabs(
         }
     }
 
-    Column(Modifier.fillMaxSize()) {
-        Box(
-            Modifier
-                .weight(1f)
-                .fillMaxWidth(),
-        ) {
-            transition.AnimatedContent(
-                modifier = Modifier.fillMaxSize(),
-                transitionSpec = { tabTransition(reduce) },
-            ) { current ->
-                Box(Modifier.fillMaxSize()) { content(current) }
-            }
+    Box(Modifier.fillMaxSize()) {
+        transition.AnimatedContent(
+            modifier = Modifier.fillMaxSize(),
+            transitionSpec = { tabTransition(reduce) },
+        ) { current ->
+            Box(Modifier.fillMaxSize()) { content(current) }
         }
-        TabBar(current = tab, onSelect = onTabChange)
+        TabBar(current = tab, onSelect = onTabChange, modifier = Modifier.align(Alignment.BottomCenter))
     }
 }
 
