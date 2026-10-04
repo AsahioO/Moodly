@@ -158,6 +158,9 @@
     <string name="theme_rose">Rosa polvo</string>
     <string name="theme_oat">Avena</string>
     <string name="theme_ember">Brasa</string>
+    <string name="theme_slate">Pizarra</string>
+    <string name="theme_moss">Musgo</string>
+    <string name="theme_plum">Ciruela</string>
     <string name="app_lock_sub">Pide tu huella, rostro o PIN al abrir</string>
     <string name="lock_title">Moodly está bloqueado</string>
     <string name="lock_unlock">Desbloquear</string>

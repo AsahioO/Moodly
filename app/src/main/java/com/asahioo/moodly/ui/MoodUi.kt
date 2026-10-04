@@ -69,6 +69,9 @@ val AppTheme.labelRes: Int
         AppTheme.Rose -> R.string.theme_rose
         AppTheme.Oat -> R.string.theme_oat
         AppTheme.Ember -> R.string.theme_ember
+        AppTheme.Slate -> R.string.theme_slate
+        AppTheme.Moss -> R.string.theme_moss
+        AppTheme.Plum -> R.string.theme_plum
     }
 
 @get:StringRes

@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,9 +37,10 @@ import com.asahioo.moodly.ui.theme.colorsFor
  */
 @Composable
 fun ThemeSheet(selected: AppTheme, onSelect: (AppTheme) -> Unit) {
-    Column {
+    val scroll = rememberScrollState()
+    // Solo se desplaza si no cabe; así el arrastre para cerrar sigue funcionando.
+    Column(Modifier.verticalScroll(scroll, enabled = scroll.maxValue > 0)) {
         SheetHeader(stringResource(R.string.preferences), stringResource(R.string.theme_setting))
-        // ponytail: Column sin scroll; con más de ~8 temas pasar a LazyColumn.
         Column(Modifier.padding(top = 16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             AppTheme.entries.forEach { theme ->
                 ThemeRow(theme, isSelected = theme == selected, onClick = { onSelect(theme) })
